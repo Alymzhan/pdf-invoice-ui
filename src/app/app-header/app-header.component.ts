@@ -1,19 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../auth/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-app-header',
   templateUrl: './app-header.component.html',
   styleUrl: './app-header.component.css'
 })
-export class AppHeaderComponent {
+export class AppHeaderComponent implements OnInit, OnDestroy{
   username = 'Donald T.'
+  isAuthenticated = false;
+  private userSub: Subscription;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,
+    private authService: AuthService) { }
+
+  ngOnInit() {
+    this.userSub = this.authService.user.subscribe(user => {
+      this.isAuthenticated = !!user;
+      this.username = user?.email || '';
+      console.log(!user);
+      console.log(user);
+      console.log(!!user);
+    });
+  }
 
 
   logout(): void {
-    this.router.navigate(['']);
+    this.authService.logout();
   }
 
   invoice(): void {
@@ -27,12 +42,16 @@ export class AppHeaderComponent {
 
   settings(): void {
     //to do
-    this.router.navigate(['']);
+    this.router.navigate(['/table']);
   }
 
   reports(): void {
     //to do
     this.router.navigate(['']);
+  }
+
+  ngOnDestroy() {
+    this.userSub.unsubscribe();
   }
 
 }

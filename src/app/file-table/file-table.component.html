@@ -1,0 +1,40 @@
+<p>file-table works!</p>
+<div class="example-container mat-elevation-z8">
+  <table mat-table [dataSource]="files" class="mat-elevation-z8">
+    <!-- Main data columns -->
+    <ng-container matColumnDef="fileName">
+      <th mat-header-cell *matHeaderCellDef> File Name </th>
+      <td mat-cell *matCellDef="let file"> {{ file.fileName }} </td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef> Status </th>
+      <td mat-cell *matCellDef="let file"> {{ file.status }} </td>
+    </ng-container>
+    <ng-container matColumnDef="size">
+      <th mat-header-cell *matHeaderCellDef> Size </th>
+      <td mat-cell *matCellDef="let file"> {{ file.size }} </td>
+    </ng-container>
+    <!-- Expandable row -->
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let file" [attr.colspan]="columnsToDisplay.length">
+        <div class="example-element-detail" *ngIf="file === expandedElement">
+          <div>Details:</div>
+          <div *ngFor="let subFile of file.files">
+            {{ subFile.fileName }} - {{ subFile.status }}
+          </div>
+        </div>
+      </td>
+    </ng-container>
+    <!-- Header and Row Definitions -->
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let file; columns: columnsToDisplay"
+        class="element-row"
+        [class.example-expanded-row]="expandedElement === file"
+        (click)="toggleRow(file)">
+    </tr>
+    <!-- Define which rows should show the expanded detail -->
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow"
+        class="example-detail-row">
+    </tr>
+  </table>
+</div>

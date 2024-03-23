@@ -51,4 +51,18 @@ body {
   button:hover {
     background-color: #5b62f6;
   }
+
+  button[disabled] {
+    background-color: #ccc; /* Grey color for disabled buttons */
+    cursor: not-allowed; /* Change cursor for disabled buttons */
+}
+
+.alert {
+    background-color: #f44336; /* Red */
+    color: white;
+    padding: 1px;
+    border-radius: 4px;
+    margin-top: 10px;
+    text-align: center;
+  }
   
