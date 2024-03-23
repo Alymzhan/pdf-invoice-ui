@@ -1,0 +1,37 @@
+.container {
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.finish-text {
+    color: green;
+}  
+
+.invoice-card {
+    width: 550px;
+    margin-right: 30px;
+    margin-left: 20px;
+}
+
+.table-container {
+    width: 100%;
+    overflow: auto; /* Add overflow scroll for smaller screens */
+    margin-right: 30px;
+}
+
+.max-width {
+    flex: 1; /* Allow the Source File Name column to take up remaining space */
+    max-width: 300px; /* Set max-width for Source File Name column */
+}
+
+.mat-column-uploadDateTime,
+.mat-column-sourceFileName,
+.mat-column-uploadStatus {
+    text-align: left; /* Align the text in cells to the left */
+}
+
+.center {
+    align-items: center;
+}  

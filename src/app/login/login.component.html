@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="login.component.css">
+  <title>Login Page</title>
+</head>
+<body>
+  <div class="login-container">
+    <h2>АРМ "Отчетность PDF"</h2>
+    <form action="#">
+      <label for="username">Логин:</label>
+      <input type="text" id="username" name="username" required>
+
+      <label for="password">Пароль:</label>
+      <input type="password" id="password" name="password" required>
+
+      <button type="submit" (click)="login()">Войти в систему</button>
+    </form>
+  </div>
+</body>
+</html>

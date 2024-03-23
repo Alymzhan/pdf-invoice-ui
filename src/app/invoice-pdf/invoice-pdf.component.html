@@ -1,0 +1,71 @@
+<app-app-header></app-app-header>
+<div class="container">
+    <mat-card class="invoice-card">
+        <mat-card-header>
+          <mat-card-title>Акты PDF</mat-card-title>
+          <mat-card-subtitle></mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-divider></mat-divider>
+          <p>1. Выберите Регион</p>
+          <mat-form-field style="width: 300px;">
+            <mat-label>Регион</mat-label>
+            <mat-select>
+              <mat-option value="moscow">Москва</mat-option>
+              <mat-option value="nalchik">Нальчик</mat-option>
+              <mat-option value="dagestan">Дагестан</mat-option>
+            </mat-select>
+            <mat-hint align="end"></mat-hint>
+          </mat-form-field>
+          <mat-divider></mat-divider>
+          <p>2. Загрузить файл Excel (<a href="/file/example.xlsx">Образец файла Excel</a>)</p>
+            <input #xlsxInput hidden="true" type="file" onclick="this.value=null" (change)="xlsxInputChange($event)" accept=".xlsx"/>
+            <button mat-flat-button color="primary" (click)="xlsxInput.click()">Выберите файл (Excel)</button>
+          <mat-divider></mat-divider>
+          <p>3. Загрузить и сгенерировать Акты</p>
+          <button mat-flat-button color="primary" (click)="onGenerate()">Начать процесс</button>
+        </mat-card-content>
+        <mat-card-actions class="center">
+            <div *ngIf="showFinishText" class="finish-text">{{finishText}}</div>
+        </mat-card-actions>
+        <mat-card-footer>
+          <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate"></mat-progress-bar>
+        </mat-card-footer>
+      </mat-card>
+
+      <div class="table-container">
+        <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            <ng-container matColumnDef="uploadDateTime">
+                <mat-header-cell *matHeaderCellDef class="mat-column-uploadDateTime"> Дата загрузки </mat-header-cell>
+                <mat-cell *matCellDef="let element" class="mat-column-uploadDateTime"> {{element.uploadDateTime}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="sourceFileName">
+                <mat-header-cell *matHeaderCellDef class="mat-column-sourceFileName"> Файл источник </mat-header-cell>
+                <mat-cell *matCellDef="let element" class="mat-column-sourceFileName"> {{element.sourceFileName}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="region">
+                <mat-header-cell *matHeaderCellDef> Регион </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.region}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="uploadStatus">
+                <mat-header-cell *matHeaderCellDef class="mat-column-uploadStatus"> Статус </mat-header-cell>
+                <mat-cell *matCellDef="let element" class="mat-column-uploadStatus" [ngStyle]="{
+                    'color': element.uploadStatus === 'Successful' ? 'green' : 
+                             element.uploadStatus === 'Pending' ? 'grey' : 
+                             element.uploadStatus === 'Failed' ? 'red' : 'black'
+                }"> {{element.uploadStatus}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="downloadLink">
+              <mat-header-cell *matHeaderCellDef> Скачать </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <button mat-button color="primary" [routerLink]="element.downloadLink">Скачать файл</button>
+                <!-- <mat-icon>download</mat-icon> -->
+              </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+    </div>
+    
+</div>
+
