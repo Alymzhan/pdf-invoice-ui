@@ -12,12 +12,11 @@
     <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" >
       <label for="username">Логин:</label>
       <input type="text"
-        id="email"
+        id="userName"
         class="form-control"
         ngModel
-        name="email"
+        name="userName"
         required
-        
       >
 
       <label for="password">Пароль:</label>
@@ -28,7 +27,6 @@
           ngModel
           name="password"
           required
-          
         />
 
       <button [disabled]="!authForm.valid" type="submit">Войти в систему</button>

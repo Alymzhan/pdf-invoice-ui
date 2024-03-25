@@ -35,3 +35,11 @@
 .center {
     align-items: center;
 }  
+
+.selected-file-label {
+    display: inline-block;
+    background-color: lightgreen;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }

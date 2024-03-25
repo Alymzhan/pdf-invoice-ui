@@ -3,61 +3,74 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { AuthService, AuthResponseData } from './auth.service';
+import { AuthService } from './auth.service';
+import { UserResponse } from '../models/user.model';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html'
 })
 export class AuthComponent {
-  isLoginMode = true;
   isLoading = false;
   error: string | null = null;
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  onSwitchMode() {
-    this.isLoginMode = !this.isLoginMode;
-  }
-
   onSubmit(form: NgForm) {
 
     this.error = null;
     if (!form.valid) {
-      return;
+    return;
     }
-    const email = form.value.email;
+    const userName = form.value.userName;
     const password = form.value.password;
 
-    let authObs2: Observable<any>;
-
-    authObs2 = this.authService.login2(email, password);
-
-    authObs2.subscribe(x=> console.log('here', x));
-
-    let authObs: Observable<AuthResponseData>;
+    let authObs: Observable<UserResponse>;
 
     this.isLoading = true;
 
-    // if (this.isLoginMode) {
-    //   authObs = this.authService.login(email, password);
-    // } else {
-    //   authObs = this.authService.signup(email, password);
-    // }
+    authObs = this.authService.login(userName, password);
 
-    // authObs.subscribe(
-    //   resData => {
-    //     console.log(resData);
-    //     this.isLoading = false;
-    //     this.router.navigate(['/invoice']);
-    //   },
-    //   errorMessage => {
-    //     console.log(errorMessage);
-    //     this.error = errorMessage;
-    //     this.isLoading = false;
-    //   }
-    // );
+    authObs.subscribe(
+      resData => {
+        if (resData.status) {
+          console.log(resData);
+          this.isLoading = false;
+          this.router.navigate(['/invoice']);
+        } else {
+          console.log(resData.message);
+          this.error = this.handleErrorMessage(resData.message);
+          this.isLoading = false;
+        }
+      },
+      errorMessage => {
+        console.log(errorMessage);
+        this.error = errorMessage;
+        this.isLoading = false;
+      }
+    );
 
     form.reset();
+  }
+
+  private handleErrorMessage(errorRes: string) {
+
+    console.log('here', errorRes);
+    let errorMessage = 'Неверный логин или пароль!';
+    if (!errorRes) {
+      return errorMessage;
+    }
+    switch (errorRes) {
+      case 'EMAIL_EXISTS':
+        errorMessage = 'Этот email уже существует';
+        break;
+      case 'Invalid login credentials. Please try again':
+        errorMessage = 'Неверный логин или пароль!';
+        break;
+      case 'User Name address not found':
+        errorMessage = 'Неверный логин или пароль!';
+        break;
+    }
+    return errorMessage;
   }
 }

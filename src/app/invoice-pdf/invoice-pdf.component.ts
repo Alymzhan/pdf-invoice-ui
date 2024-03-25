@@ -1,7 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UploadedFile } from '../models/uploadFiles.model';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { InvoicePDFService } from './invoice-pdf.service';
+import { Files } from '../models/files.model';
+import { MatTable } from '@angular/material/table';
 
 export interface TableData {
   uploadDateTime: string;
@@ -18,41 +19,17 @@ export interface TableData {
   styleUrl: './invoice-pdf.component.css'
 })
 export class InvoicePdfComponent implements OnInit, OnDestroy{
+  @ViewChild(MatTable) table: MatTable<Files>;
   isDisabled = true;
-  files: UploadedFile[];
+  files: Files[] = [];
   subscription: Subscription;
+  formData: FormData | null;
+  selectedFileName: string | null;
 
   showProgressBar = false;
   showFinishText = false;
   finishText='Done!';
-
-  // displayedColumns: string[] = ['uploadDateTime', 'sourceFileName', 'region', 'uploadStatus', 'downloadLink'];
-  displayedColumns: string[] = ['updatedAt', 'fileName', 'contentType', 'size', 'status'];
-
-  dataSource: TableData[] = [
-    { 
-      uploadDateTime: '2022-03-10', 
-      sourceFileName: 'file1.txt', 
-      uploadStatus: 'Successful', 
-      region: 'Region1', 
-      downloadLink: 'http://example.com/file1.txt' // Sample download link for file1.txt
-    },
-    { 
-      uploadDateTime: '2022-03-11', 
-      sourceFileName: 'file2.txt', 
-      uploadStatus: 'Failed', 
-      region: 'Region2', 
-      downloadLink: 'http://example.com/file2.txt' // Sample download link for file2.txt
-    },
-    { 
-      uploadDateTime: '2022-03-12', 
-      sourceFileName: 'file3.txt', 
-      uploadStatus: 'Pending', 
-      region: 'Region3', 
-      downloadLink: 'http://example.com/file3.txt' // Sample download link for file3.txt
-    },
-    // Add more records here
-  ];
+  displayedColumns: string[] = ['ID', 'CreatedAt', 'fileName', 'size', 'status'];
 
   constructor(private invoiceService: InvoicePDFService,
     // private router: Router,
@@ -61,49 +38,72 @@ export class InvoicePdfComponent implements OnInit, OnDestroy{
 }
 
   ngOnInit() {
-    // this.subscription = this.invoiceService.filesChanged
-    //   .subscribe(
-    //     (files: UploadedFile[]) => {
-    //       this.files = files;
-    //     }
-    //   );
-    this.subscription = this.invoiceService.getFiles().subscribe(files => this.files = files);
+    this.subscription = this.invoiceService.getFiles().subscribe(files => {
+      console.log('files.files', files.Files); 
+      this.files = files.Files
+      this.sortFilesByCreatedAt();
+    });
+  }
+
+  sortFilesByCreatedAt() {
+    this.files.sort((a, b) => {
+      return new Date(b.CreatedAt).getTime() - new Date(a.CreatedAt).getTime();
+    });
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 
-  startProgress(): void {
-    this.showFinishText = false;
-    this.finishText='Result was saved!';
-    this.showProgressBar = true;
-    this.isDisabled=true;
-    setTimeout(() => {
-      this.showProgressBar = false;
-      this.showFinishText = true;
-    }, 5000); // 5000 milliseconds = 5 seconds
-  }
-
-  onFileSelected(event: any): void {
-    const selectedFile = event.target.files[0];
-    console.log('Selected File:', selectedFile);
-    // Implement logic to handle the selected file (e.g., upload to server)
-  }
-
   xlsxInputChange(fileInputEvent: any) {
-    console.log(fileInputEvent.target.files[0]);
+    this.showFinishText = false;
+    const file = fileInputEvent.target.files[0];
+    this.selectedFileName = file ? file.name : null;
+    this.formData = new FormData();
+    this.formData.append('file', file);
+  }
+
+  uploadFile(formData: FormData) {
+    this.showProgressBar = true;
+    this.invoiceService.sendFile(formData).subscribe(
+      response => {
+        if (response.status) {
+          // Handle successful file upload response
+          this.showFinishText = true;
+          this.finishText = 'Файл успешно загружен.';
+          this.showProgressBar = false;
+          this.files.push(response.File); // Add the uploaded file to the files array
+          this.sortFilesByCreatedAt();
+          this.table.renderRows();
+          console.log('this.files after', this.files);
+          console.log('response after', response);
+        } else {
+          // Handle error
+          console.error('File upload error:', response.message);
+          this.showProgressBar = false;
+          this.showFinishText = true;
+          this.finishText = 'Ошибка загрузки файла.';
+        }
+      },
+      error => {
+        // Handle error
+        console.error('File upload error:', error);
+        this.showProgressBar = false;
+        this.showFinishText = true;
+        this.finishText = 'Ошибка загрузки файла.';
+      }
+    );
   }
 
   onGenerate(){
-    this.showFinishText = false;
-    this.finishText='Invoice was generated!';
-    this.showProgressBar = true;
-    setTimeout(() => {
-      this.showProgressBar = false;
-      this.showFinishText = true;
-      this.isDisabled=false;
-    }, 5000); // 5000 milliseconds = 5 seconds
+    if (this.formData) {
+      this.uploadFile(this.formData);
+      this.clearSelection();
+    }
   }
 
+  clearSelection(){
+    this.selectedFileName = null;
+    this.formData = null;
+  }
 }

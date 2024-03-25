@@ -25,3 +25,25 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## API CURLs
+### Login
+
+`curl --location 'http://localhost:8080/api/user/login' \
+--header 'Content-Type: application/json' \
+--data '{
+    "userName": "Alym",
+    "password": "Alym2024"
+}'`
+
+
+### Dashboard
+
+`curl --location 'http://localhost:8080/api/getDashboard/1' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTE0MDg1OTQsInN1YiI6IjEifQ.9hnLnGewzlGp2pR14p_CYGHDMez9bQ4mxtkYzcr2858'`
+
+### Upload
+
+`curl --location 'http://localhost:8080/api/upload' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTE0MDg1OTQsInN1YiI6IjEifQ.9hnLnGewzlGp2pR14p_CYGHDMez9bQ4mxtkYzcr2858' \
+--form 'file=@"/Users/alymzhan/Downloads/file1_1.xlsx"'`

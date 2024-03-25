@@ -19,11 +19,14 @@
           </mat-form-field>
           <mat-divider></mat-divider>
           <p>2. Загрузить файл Excel (<a href="/file/example.xlsx">Образец файла Excel</a>)</p>
+          <div *ngIf="selectedFileName" class="selected-file-label">
+            Выбранный файл: {{ selectedFileName }}
+          </div>
             <input #xlsxInput hidden="true" type="file" onclick="this.value=null" (change)="xlsxInputChange($event)" accept=".xlsx"/>
             <button mat-flat-button color="primary" (click)="xlsxInput.click()">Выберите файл (Excel)</button>
           <mat-divider></mat-divider>
           <p>3. Загрузить и сгенерировать Акты</p>
-          <button mat-flat-button color="primary" (click)="onGenerate()">Начать процесс</button>
+          <button mat-flat-button color="primary" [disabled]="!formData" (click)="onGenerate()">Загрузить файл</button>
         </mat-card-content>
         <mat-card-actions class="center">
             <div *ngIf="showFinishText" class="finish-text">{{finishText}}</div>
@@ -35,21 +38,21 @@
 
       <div class="table-container">
         <mat-table [dataSource]="files" class="mat-elevation-z8">
-            <ng-container matColumnDef="updatedAt">
-                <mat-header-cell *matHeaderCellDef class="mat-column-uploadDateTime"> Дата загрузки </mat-header-cell>
-                <mat-cell *matCellDef="let element" class="mat-column-uploadDateTime"> {{element.updatedAt}} </mat-cell>
+            <ng-container matColumnDef="ID">
+              <mat-header-cell *matHeaderCellDef style="flex: 0.1;"> ID </mat-header-cell>
+              <mat-cell *matCellDef="let element" style="flex: 0.1;"> {{element.ID}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="CreatedAt">
+              <mat-header-cell *matHeaderCellDef class="mat-column-uploadDateTime"> Дата загрузки </mat-header-cell>
+              <mat-cell *matCellDef="let element" class="mat-column-uploadDateTime"> {{ element.CreatedAt | date: 'M/d/yy, h:mm a' }} </mat-cell>
             </ng-container>
             <ng-container matColumnDef="fileName">
-                <mat-header-cell *matHeaderCellDef class="mat-column-sourceFileName"> Файл источник </mat-header-cell>
+                <mat-header-cell *matHeaderCellDef class="mat-column-sourceFileName"> Наименование файла </mat-header-cell>
                 <mat-cell *matCellDef="let element" class="mat-column-sourceFileName"> {{element.fileName}} </mat-cell>
             </ng-container>
-            <ng-container matColumnDef="contentType">
-                <mat-header-cell *matHeaderCellDef> contentType </mat-header-cell>
-                <mat-cell *matCellDef="let element"> {{element.contentType}} </mat-cell>
-            </ng-container>
             <ng-container matColumnDef="size">
-              <mat-header-cell *matHeaderCellDef> size </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{element.size}} </mat-cell>
+              <mat-header-cell *matHeaderCellDef> Размер файла </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{ (element.size / (1024 * 1024)).toFixed(2) }} Мб. </mat-cell>
           </ng-container>
             <ng-container matColumnDef="status">
                 <mat-header-cell *matHeaderCellDef class="mat-column-uploadStatus"> Статус </mat-header-cell>

@@ -5,6 +5,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { throwError, BehaviorSubject } from 'rxjs';
 
 import { User } from './user.model';
+import { Roles, UserResponse } from '../models/user.model';
 
 export interface AuthResponseData {
   kind: string;
@@ -26,7 +27,7 @@ export class AuthService {
 
   signup(email: string, password: string) {
     return this.http
-      .post<AuthResponseData>(
+      .post<UserResponse>(
         'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyAvcex4MoXBfqHyFJWt7pDryvREfYg3v80',
         {
           email: email,
@@ -38,10 +39,12 @@ export class AuthService {
         catchError(this.handleError),
         tap(resData => {
           this.handleAuthentication(
-            resData.email,
-            resData.localId,
-            resData.idToken,
-            +resData.expiresIn
+            resData.User.userName,
+            resData.User.ID, 
+            resData.User.roles, 
+            resData.User.name, 
+            resData.User.phone_number, 
+            resData.User.token
           );
         })
       );
@@ -49,7 +52,7 @@ export class AuthService {
 
   login(email: string, password: string) {
     return this.http
-      .post<AuthResponseData>(
+      .post<UserResponse>(
         '/api/user/login',
         {
           userName: email,
@@ -59,13 +62,17 @@ export class AuthService {
       .pipe(
         catchError(this.handleError),
         tap(resData => {
-          console.log('response', resData);
-          // this.handleAuthentication(
-          //   resData.email,
-          //   resData.localId,
-          //   resData.idToken,
-          //   +resData.expiresIn
-          // );
+          if (resData.status) {
+            console.log('response', resData);
+            this.handleAuthentication(
+                resData.User.userName,
+                resData.User.ID, 
+                resData.User.roles, 
+                resData.User.name, 
+                resData.User.phone_number, 
+                resData.User.token
+              );
+          } 
         })
       );
   }
@@ -95,23 +102,8 @@ export class AuthService {
   }
 
   autoLogin() {
-    // const userData: {
-    //   email: string;
-    //   id: string;
-    //   _token: string;
-    //   _tokenExpirationDate: string;
-    // } = JSON.parse(localStorage.getItem('userData'));
-    // if (!userData) {
-    //   return;
-    // }
-
     const userDataString = localStorage.getItem('userData');
-    let userData: {
-      email: string;
-      id: string;
-      _token: string;
-      _tokenExpirationDate: string;
-    };
+    let userData: User;
 
     if (!userDataString) {
       return;
@@ -120,16 +112,19 @@ export class AuthService {
     }
 
     const loadedUser = new User(
-      userData.email,
-      userData.id,
-      userData._token,
-      new Date(userData._tokenExpirationDate)
+      userData.userName,
+      userData.id, 
+      userData.roles, 
+      userData.name, 
+      userData.phone_number, 
+      userData.token,
+      userData.tokenExpirationDate
     );
 
     if (loadedUser.token) {
       this.user.next(loadedUser);
       const expirationDuration =
-        new Date(userData._tokenExpirationDate).getTime() -
+        new Date(userData.tokenExpirationDate).getTime() -
         new Date().getTime();
       this.autoLogout(expirationDuration);
     }
@@ -152,13 +147,16 @@ export class AuthService {
   }
 
   private handleAuthentication(
-    email: string,
-    userId: string,
+    userName: string,
+    id: number,
+    roles: Roles,
+    name: string,
+    phone_number: string,
     token: string,
-    expiresIn: number
+    expiresIn: number = 86400
   ) {
-    const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
-    const user = new User(email, userId, token, expirationDate);
+    const expirationDate = new Date(new Date().getTime() + expiresIn * 1000); //86400sec == 24hr, or it will expire in one day
+    const user = new User(userName, id, roles, name, phone_number, token, expirationDate);
     this.user.next(user);
     this.autoLogout(expiresIn * 1000);
     localStorage.setItem('userData', JSON.stringify(user));
