@@ -27,7 +27,7 @@ export class AuthService {
   signup(email: string, password: string) {
     return this.http
       .post<AuthResponseData>(
-        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=key',
+        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyAvcex4MoXBfqHyFJWt7pDryvREfYg3v80',
         {
           email: email,
           password: password,
@@ -50,22 +50,46 @@ export class AuthService {
   login(email: string, password: string) {
     return this.http
       .post<AuthResponseData>(
-        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=key',
+        '/api/user/login',
         {
-          email: email,
+          userName: email,
           password: password,
-          returnSecureToken: true
         }
       )
       .pipe(
         catchError(this.handleError),
         tap(resData => {
-          this.handleAuthentication(
-            resData.email,
-            resData.localId,
-            resData.idToken,
-            +resData.expiresIn
-          );
+          console.log('response', resData);
+          // this.handleAuthentication(
+          //   resData.email,
+          //   resData.localId,
+          //   resData.idToken,
+          //   +resData.expiresIn
+          // );
+        })
+      );
+  }
+
+  login2(email: string, password: string) {
+    return this.http
+      .post(
+        '/api/user/login',
+        {
+          userName: email,
+          password: password,
+        }
+      )
+      .pipe(
+        catchError(this.handleError),
+        tap(resData => {
+          // debugger;
+          console.log('response', resData);
+          // this.handleAuthentication(
+          //   resData.email,
+          //   resData.localId,
+          //   resData.idToken,
+          //   +resData.expiresIn
+          // );
         })
       );
   }

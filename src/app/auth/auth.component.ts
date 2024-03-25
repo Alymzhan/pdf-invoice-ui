@@ -21,6 +21,7 @@ export class AuthComponent {
   }
 
   onSubmit(form: NgForm) {
+
     this.error = null;
     if (!form.valid) {
       return;
@@ -28,28 +29,34 @@ export class AuthComponent {
     const email = form.value.email;
     const password = form.value.password;
 
+    let authObs2: Observable<any>;
+
+    authObs2 = this.authService.login2(email, password);
+
+    authObs2.subscribe(x=> console.log('here', x));
+
     let authObs: Observable<AuthResponseData>;
 
     this.isLoading = true;
 
-    if (this.isLoginMode) {
-      authObs = this.authService.login(email, password);
-    } else {
-      authObs = this.authService.signup(email, password);
-    }
+    // if (this.isLoginMode) {
+    //   authObs = this.authService.login(email, password);
+    // } else {
+    //   authObs = this.authService.signup(email, password);
+    // }
 
-    authObs.subscribe(
-      resData => {
-        console.log(resData);
-        this.isLoading = false;
-        this.router.navigate(['/invoice']);
-      },
-      errorMessage => {
-        console.log(errorMessage);
-        this.error = errorMessage;
-        this.isLoading = false;
-      }
-    );
+    // authObs.subscribe(
+    //   resData => {
+    //     console.log(resData);
+    //     this.isLoading = false;
+    //     this.router.navigate(['/invoice']);
+    //   },
+    //   errorMessage => {
+    //     console.log(errorMessage);
+    //     this.error = errorMessage;
+    //     this.isLoading = false;
+    //   }
+    // );
 
     form.reset();
   }

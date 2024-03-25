@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { UploadedFile } from '../models/uploadFiles.model';
+import { Subscription } from 'rxjs';
+import { InvoicePDFService } from './invoice-pdf.service';
 
 export interface TableData {
   uploadDateTime: string;
@@ -14,14 +17,17 @@ export interface TableData {
   templateUrl: './invoice-pdf.component.html',
   styleUrl: './invoice-pdf.component.css'
 })
-export class InvoicePdfComponent {
+export class InvoicePdfComponent implements OnInit, OnDestroy{
   isDisabled = true;
+  files: UploadedFile[];
+  subscription: Subscription;
 
   showProgressBar = false;
   showFinishText = false;
   finishText='Done!';
 
-  displayedColumns: string[] = ['uploadDateTime', 'sourceFileName', 'region', 'uploadStatus', 'downloadLink'];
+  // displayedColumns: string[] = ['uploadDateTime', 'sourceFileName', 'region', 'uploadStatus', 'downloadLink'];
+  displayedColumns: string[] = ['updatedAt', 'fileName', 'contentType', 'size', 'status'];
 
   dataSource: TableData[] = [
     { 
@@ -47,6 +53,26 @@ export class InvoicePdfComponent {
     },
     // Add more records here
   ];
+
+  constructor(private invoiceService: InvoicePDFService,
+    // private router: Router,
+    // private route: ActivatedRoute
+    ) {
+}
+
+  ngOnInit() {
+    // this.subscription = this.invoiceService.filesChanged
+    //   .subscribe(
+    //     (files: UploadedFile[]) => {
+    //       this.files = files;
+    //     }
+    //   );
+    this.subscription = this.invoiceService.getFiles().subscribe(files => this.files = files);
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 
   startProgress(): void {
     this.showFinishText = false;

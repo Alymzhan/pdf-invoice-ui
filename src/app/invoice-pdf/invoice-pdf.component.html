@@ -34,34 +34,37 @@
       </mat-card>
 
       <div class="table-container">
-        <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-            <ng-container matColumnDef="uploadDateTime">
+        <mat-table [dataSource]="files" class="mat-elevation-z8">
+            <ng-container matColumnDef="updatedAt">
                 <mat-header-cell *matHeaderCellDef class="mat-column-uploadDateTime"> Дата загрузки </mat-header-cell>
-                <mat-cell *matCellDef="let element" class="mat-column-uploadDateTime"> {{element.uploadDateTime}} </mat-cell>
+                <mat-cell *matCellDef="let element" class="mat-column-uploadDateTime"> {{element.updatedAt}} </mat-cell>
             </ng-container>
-            <ng-container matColumnDef="sourceFileName">
+            <ng-container matColumnDef="fileName">
                 <mat-header-cell *matHeaderCellDef class="mat-column-sourceFileName"> Файл источник </mat-header-cell>
-                <mat-cell *matCellDef="let element" class="mat-column-sourceFileName"> {{element.sourceFileName}} </mat-cell>
+                <mat-cell *matCellDef="let element" class="mat-column-sourceFileName"> {{element.fileName}} </mat-cell>
             </ng-container>
-            <ng-container matColumnDef="region">
-                <mat-header-cell *matHeaderCellDef> Регион </mat-header-cell>
-                <mat-cell *matCellDef="let element"> {{element.region}} </mat-cell>
+            <ng-container matColumnDef="contentType">
+                <mat-header-cell *matHeaderCellDef> contentType </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.contentType}} </mat-cell>
             </ng-container>
-            <ng-container matColumnDef="uploadStatus">
+            <ng-container matColumnDef="size">
+              <mat-header-cell *matHeaderCellDef> size </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.size}} </mat-cell>
+          </ng-container>
+            <ng-container matColumnDef="status">
                 <mat-header-cell *matHeaderCellDef class="mat-column-uploadStatus"> Статус </mat-header-cell>
                 <mat-cell *matCellDef="let element" class="mat-column-uploadStatus" [ngStyle]="{
-                    'color': element.uploadStatus === 'Successful' ? 'green' : 
-                             element.uploadStatus === 'Pending' ? 'grey' : 
-                             element.uploadStatus === 'Failed' ? 'red' : 'black'
-                }"> {{element.uploadStatus}} </mat-cell>
+                    'color': element.status === 'Complete' ? 'green' : 
+                             element.status === 'Pending' ? 'grey' : 
+                             element.status === 'Failed' ? 'red' : 'black'
+                }"> {{element.status}} </mat-cell>
             </ng-container>
-            <ng-container matColumnDef="downloadLink">
+            <!-- <ng-container matColumnDef="downloadLink">
               <mat-header-cell *matHeaderCellDef> Скачать </mat-header-cell>
               <mat-cell *matCellDef="let element">
                 <button mat-button color="primary" [routerLink]="element.downloadLink">Скачать файл</button>
-                <!-- <mat-icon>download</mat-icon> -->
               </mat-cell>
-            </ng-container>
+            </ng-container> -->
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
         </mat-table>
