@@ -32,6 +32,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FileTableComponent } from './file-table/file-table.component';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { AuthComponent } from './auth/auth.component';
+import { FileSizePipe } from './file-size.pipe';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { AuthComponent } from './auth/auth.component';
     NotFoundPageComponent,
     AppHeaderComponent,
     FileTableComponent,
-    AuthComponent
+    AuthComponent,
+    FileSizePipe
   ],
   imports: [
     BrowserModule,

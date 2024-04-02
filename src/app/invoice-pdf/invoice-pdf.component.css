@@ -43,3 +43,65 @@
     border-radius: 4px;
     margin-bottom: 10px;
   }
+
+
+  table {
+    width: 100%;
+  }
+  
+  tr.example-detail-row {
+    height: 0;
+  }
+  
+  tr.example-element-row:not(.example-expanded-row):hover {
+    background: whitesmoke;
+  }
+  
+  tr.example-element-row:not(.example-expanded-row):active {
+    background: #efefef;
+  }
+  
+  .example-element-row td {
+    border-bottom-width: 0;
+  }
+  
+  /* .example-element-detail {
+    overflow: hidden;
+    display: flex;
+  } */
+  
+  .example-element-description {
+    padding: 16px;
+  }
+  
+  .example-element-description-attribution {
+    /* display: block; */
+    /* margin-bottom: 10px; Adjust the margin as needed to separate the divs vertically */
+  }
+
+
+  .file-list {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+  }
+  
+  .file-item {
+    margin-bottom: 20px;
+  }
+  
+  .mat-card {
+    width: 400px;
+  }
+  
+  .mat-card-content {
+    padding: 20px;
+  }
+  
+  .mat-card-actions {
+    display: flex;
+    justify-content: flex-end;
+    /* padding: 0 20px 20px; */
+  }
+  
+  

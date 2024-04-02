@@ -1,40 +1,50 @@
 <p>file-table works!</p>
-<div class="example-container mat-elevation-z8">
-  <table mat-table [dataSource]="files" class="mat-elevation-z8">
-    <!-- Main data columns -->
-    <ng-container matColumnDef="fileName">
-      <th mat-header-cell *matHeaderCellDef> File Name </th>
-      <td mat-cell *matCellDef="let file"> {{ file.fileName }} </td>
+<table mat-table
+       [dataSource]="files" multiTemplateDataRows
+       class="mat-elevation-z8">
+  @for (column of columnsToDisplay; track column) {
+    <ng-container matColumnDef="{{column}}">
+      <th mat-header-cell *matHeaderCellDef> {{column}} </th>
+      <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
     </ng-container>
-    <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef> Status </th>
-      <td mat-cell *matCellDef="let file"> {{ file.status }} </td>
-    </ng-container>
-    <ng-container matColumnDef="size">
-      <th mat-header-cell *matHeaderCellDef> Size </th>
-      <td mat-cell *matCellDef="let file"> {{ file.size }} </td>
-    </ng-container>
-    <!-- Expandable row -->
-    <ng-container matColumnDef="expandedDetail">
-      <td mat-cell *matCellDef="let file" [attr.colspan]="columnsToDisplay.length">
-        <div class="example-element-detail" *ngIf="file === expandedElement">
-          <div>Details:</div>
-          <div *ngFor="let subFile of file.files">
-            {{ subFile.fileName }} - {{ subFile.status }}
-          </div>
+  }
+  <ng-container matColumnDef="expand">
+    <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+    <td mat-cell *matCellDef="let element">
+      <button mat-icon-button aria-label="expand row" (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+        @if (expandedElement === element) {
+          <mat-icon>keyboard_arrow_up</mat-icon>
+        } @else {
+          <mat-icon>keyboard_arrow_down</mat-icon>
+        }
+      </button>
+    </td>
+  </ng-container>
+
+  <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+  <ng-container matColumnDef="expandedDetail">
+    <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+      <div class="example-element-detail"
+           [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+        <!-- <div class="example-element-diagram">
+          <div class="example-element-position"> {{element.fileName}} </div>
+          <div class="example-element-symbol"> {{element.status}} </div>
+          <div class="example-element-name"> {{element.size}} </div>
+        </div> -->
+        <div class="example-element-description">
+          {{element.fileName}}
+          <span class="example-element-description-attribution"> -- Wikipedia </span>
         </div>
-      </td>
-    </ng-container>
-    <!-- Header and Row Definitions -->
-    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-    <tr mat-row *matRowDef="let file; columns: columnsToDisplay"
-        class="element-row"
-        [class.example-expanded-row]="expandedElement === file"
-        (click)="toggleRow(file)">
-    </tr>
-    <!-- Define which rows should show the expanded detail -->
-    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow"
-        class="example-detail-row">
-    </tr>
-  </table>
-</div>
+      </div>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+  <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;"
+      class="example-element-row"
+      [class.example-expanded-row]="expandedElement === element"
+      (click)="expandedElement = expandedElement === element ? null : element">
+  </tr>
+  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+</table>
+

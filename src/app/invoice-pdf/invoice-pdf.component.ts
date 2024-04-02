@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { InvoicePDFService } from './invoice-pdf.service';
 import { Files } from '../models/files.model';
 import { MatTable } from '@angular/material/table';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 export interface TableData {
   uploadDateTime: string;
@@ -16,7 +17,14 @@ export interface TableData {
 @Component({
   selector: 'app-invoice-pdf',
   templateUrl: './invoice-pdf.component.html',
-  styleUrl: './invoice-pdf.component.css'
+  styleUrl: './invoice-pdf.component.css',
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed,void', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class InvoicePdfComponent implements OnInit, OnDestroy{
   @ViewChild(MatTable) table: MatTable<Files>;
@@ -25,17 +33,25 @@ export class InvoicePdfComponent implements OnInit, OnDestroy{
   subscription: Subscription;
   formData: FormData | null;
   selectedFileName: string | null;
+  expandedElement: any | null;
 
   showProgressBar = false;
   showFinishText = false;
   finishText='Done!';
-  displayedColumns: string[] = ['ID', 'CreatedAt', 'fileName', 'size', 'status'];
+  // displayedColumns: string[] = ['ID', 'CreatedAt', 'fileName', 'size', 'status'];
+  columnsToDisplay = ['ID', 'CreatedAt', 'fileName', 'size', 'status'];
+  columnsToDisplayWithExpand = ['expand', ...this.columnsToDisplay];
 
   constructor(private invoiceService: InvoicePDFService,
     // private router: Router,
     // private route: ActivatedRoute
     ) {
 }
+
+toggleRow(element: any): void {
+  this.expandedElement = this.expandedElement === element ? null : element;
+}
+
 
   ngOnInit() {
     this.subscription = this.invoiceService.getFiles().subscribe(files => {
@@ -93,6 +109,11 @@ export class InvoicePdfComponent implements OnInit, OnDestroy{
         this.finishText = 'Ошибка загрузки файла.';
       }
     );
+  }
+
+  downloadFile(fileName: string): void {
+    // Implement file download logic here
+    console.log(`Downloading ${fileName}...`);
   }
 
   onGenerate(){

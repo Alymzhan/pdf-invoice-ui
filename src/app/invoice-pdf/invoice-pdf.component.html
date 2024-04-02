@@ -37,40 +37,121 @@
       </mat-card>
 
       <div class="table-container">
-        <mat-table [dataSource]="files" class="mat-elevation-z8">
+        <table mat-table
+              [dataSource]="files" multiTemplateDataRows
+              class="mat-elevation-z8">
+          <ng-container matColumnDef="ID">
+            <th mat-header-cell *matHeaderCellDef style="flex: 0.1;"> ID </th>
+            <td mat-cell *matCellDef="let element" style="flex: 0.1;"> {{element.ID}} </td>
+          </ng-container>
+          <ng-container matColumnDef="CreatedAt">
+            <th mat-header-cell *matHeaderCellDef class="mat-column-uploadDateTime"> Дата загрузки </th>
+            <td mat-cell *matCellDef="let element" class="mat-column-uploadDateTime"> {{ element.CreatedAt | date: 'M/d/yy, h:mm a' }} </td>
+          </ng-container>
+          <ng-container matColumnDef="fileName">
+              <th mat-header-cell *matHeaderCellDef class="mat-column-sourceFileName"> Наименование файла </th>
+              <td mat-cell *matCellDef="let element" class="mat-column-sourceFileName"> {{element.fileName}} </td>
+          </ng-container>
+          <ng-container matColumnDef="size">
+            <th mat-header-cell *matHeaderCellDef> Размер файла </th>
+            <td mat-cell *matCellDef="let element"> {{ (element.size / (1024 * 1024)).toFixed(2) }} Мб. </td>
+        </ng-container>
+          <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef class="mat-column-uploadStatus"> Статус </th>
+              <td mat-cell *matCellDef="let element" class="mat-column-uploadStatus" [ngStyle]="{
+                  'color': element.status === 'Complete' ? 'green' : 
+                           element.status === 'Pending' ? 'grey' : 
+                           element.status === 'Failed' ? 'red' : 'black'
+              }"> {{element.status}} </td>
+          </ng-container>
+          <!-- <ng-container matColumnDef="downloadLink">
+            <th mat-header-cell *matHeaderCellDef> Скачать </th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-button color="primary" [routerLink]="element.downloadLink">Скачать файл</button>
+            </td>
+          </ng-container> -->
+          
+          <ng-container matColumnDef="expand">
+            <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button aria-label="expand row" (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+                @if (expandedElement === element) {
+                  <mat-icon>keyboard_arrow_up</mat-icon>
+                } @else {
+                  <mat-icon>keyboard_arrow_down</mat-icon>
+                }
+              </button>
+            </td>
+          </ng-container>
+
+          <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+          <ng-container matColumnDef="expandedDetail">
+            <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+              <div class="example-element-detail"
+                  [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                  <div class="file-list">
+                    <div class="file-item" *ngFor="let item of element.files; let i = index">
+                      <mat-card>
+                        <mat-card-content>
+                          <div>
+                            <strong>{{i + 1 }}. </strong>
+                            <strong>Файл:</strong> {{ item.fileName }} 
+                            <strong>Размер:</strong> {{ item.size | fileSize }}
+                          </div>
+                        </mat-card-content>
+                        <mat-card-actions>
+                          <button mat-button color="primary" (click)="downloadFile(item.fileName)">Скачать</button>
+                        </mat-card-actions>
+                      </mat-card>
+                    </div>
+                  </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+          <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;"
+              class="example-element-row"
+              [class.example-expanded-row]="expandedElement === element"
+              (click)="expandedElement = expandedElement === element ? null : element">
+          </tr>
+          <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+        </table>
+
+        <!-- <mat-table [dataSource]="files" class="mat-elevation-z8">
             <ng-container matColumnDef="ID">
-              <mat-header-cell *matHeaderCellDef style="flex: 0.1;"> ID </mat-header-cell>
-              <mat-cell *matCellDef="let element" style="flex: 0.1;"> {{element.ID}} </mat-cell>
+              <th mat-header-cell *matHeaderCellDef style="flex: 0.1;"> ID </th>
+              <td mat-cell *matCellDef="let element" style="flex: 0.1;"> {{element.ID}} </td>
             </ng-container>
             <ng-container matColumnDef="CreatedAt">
-              <mat-header-cell *matHeaderCellDef class="mat-column-uploadDateTime"> Дата загрузки </mat-header-cell>
-              <mat-cell *matCellDef="let element" class="mat-column-uploadDateTime"> {{ element.CreatedAt | date: 'M/d/yy, h:mm a' }} </mat-cell>
+              <th mat-header-cell *matHeaderCellDef class="mat-column-uploadDateTime"> Дата загрузки </th>
+              <td mat-cell *matCellDef="let element" class="mat-column-uploadDateTime"> {{ element.CreatedAt | date: 'M/d/yy, h:mm a' }} </td>
             </ng-container>
             <ng-container matColumnDef="fileName">
-                <mat-header-cell *matHeaderCellDef class="mat-column-sourceFileName"> Наименование файла </mat-header-cell>
-                <mat-cell *matCellDef="let element" class="mat-column-sourceFileName"> {{element.fileName}} </mat-cell>
+                <th mat-header-cell *matHeaderCellDef class="mat-column-sourceFileName"> Наименование файла </th>
+                <td mat-cell *matCellDef="let element" class="mat-column-sourceFileName"> {{element.fileName}} </td>
             </ng-container>
             <ng-container matColumnDef="size">
-              <mat-header-cell *matHeaderCellDef> Размер файла </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{ (element.size / (1024 * 1024)).toFixed(2) }} Мб. </mat-cell>
+              <th mat-header-cell *matHeaderCellDef> Размер файла </th>
+              <td mat-cell *matCellDef="let element"> {{ (element.size / (1024 * 1024)).toFixed(2) }} Мб. </td>
           </ng-container>
             <ng-container matColumnDef="status">
-                <mat-header-cell *matHeaderCellDef class="mat-column-uploadStatus"> Статус </mat-header-cell>
-                <mat-cell *matCellDef="let element" class="mat-column-uploadStatus" [ngStyle]="{
+                <th mat-header-cell *matHeaderCellDef class="mat-column-uploadStatus"> Статус </th>
+                <td mat-cell *matCellDef="let element" class="mat-column-uploadStatus" [ngStyle]="{
                     'color': element.status === 'Complete' ? 'green' : 
                              element.status === 'Pending' ? 'grey' : 
                              element.status === 'Failed' ? 'red' : 'black'
-                }"> {{element.status}} </mat-cell>
+                }"> {{element.status}} </td>
             </ng-container>
-            <!-- <ng-container matColumnDef="downloadLink">
-              <mat-header-cell *matHeaderCellDef> Скачать </mat-header-cell>
-              <mat-cell *matCellDef="let element">
+            <ng-container matColumnDef="downloadLink">
+              <th mat-header-cell *matHeaderCellDef> Скачать </th>
+              <td mat-cell *matCellDef="let element">
                 <button mat-button color="primary" [routerLink]="element.downloadLink">Скачать файл</button>
-              </mat-cell>
-            </ng-container> -->
+              </td>
+            </ng-container>
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-        </mat-table>
+        </mat-table> -->
     </div>
     
 </div>
