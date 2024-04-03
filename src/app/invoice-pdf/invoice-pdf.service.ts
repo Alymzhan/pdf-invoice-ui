@@ -33,4 +33,11 @@ export class InvoicePDFService {
             '/api/getDashboard/1'
         );
     }
+
+    downloadFile(filename: string) {
+        return this.http
+        .get(
+            `/api/files/${filename}`, { responseType: 'blob' }
+        );
+    }
 }
