@@ -6,6 +6,7 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { CityService } from '../shared/city.service';
 
 export interface TableData {
   uploadDateTime: string;
@@ -41,10 +42,14 @@ export class InvoicePdfComponent implements OnInit, OnDestroy{
   showProgressBar = false;
   showFinishText = false;
   finishText='Done!';
-  columnsToDisplay = ['ID', 'CreatedAt', 'fileName', 'size', 'status', 'downloadLink'];
+  columnsToDisplay = ['ID', 'CreatedAt', 'fileName', 'region', 'size', 'status', 'downloadLink'];
   columnsToDisplayWithExpand = ['expand', ...this.columnsToDisplay];
 
+  cities = this.cityService.cities;
+  selectedCity: string = this.cities[0].value;
+
   constructor(private invoiceService: InvoicePDFService,
+    private cityService: CityService,
     // private router: Router,
     // private route: ActivatedRoute
     ) {
@@ -56,11 +61,14 @@ toggleRow(element: any): void {
 
   ngOnInit() {
     this.subscription = this.invoiceService.getFiles().subscribe(files => {
-      console.log('files.files', files.Files); 
-      this.files = new MatTableDataSource<Files>(files.Files);
+      this.updateTable(files.Files)
+    });
+  }
+
+  updateTable(files: Files[]){
+    this.files = new MatTableDataSource<Files>(files);
       this.sortFilesByCreatedAt();
       this.files.paginator = this.paginator; 
-    });
   }
 
   sortFilesByCreatedAt() {
@@ -84,6 +92,7 @@ toggleRow(element: any): void {
   }
 
   uploadFile(formData: FormData) {
+    formData.append('region', this.selectedCity);
     this.showProgressBar = true;
     this.invoiceService.sendFile(formData).subscribe(
       response => {
@@ -92,14 +101,11 @@ toggleRow(element: any): void {
           this.showFinishText = true;
           this.finishText = 'Файл успешно загружен.';
           this.showProgressBar = false;
-          this.files.data.push(response.File); // Add the uploaded file to the files array
-          this.sortFilesByCreatedAt();
-          this.table.renderRows();
-          console.log('this.files after', this.files);
-          console.log('response after', response);
+          const updatedFiles = [...this.files.data, response.File];
+          this.updateTable(updatedFiles)
+          this.table.renderRows(); // Refresh table
         } else {
           // Handle error
-          console.error('File upload error:', response.message);
           this.showProgressBar = false;
           this.showFinishText = true;
           this.finishText = 'Ошибка загрузки файла.';
@@ -116,8 +122,6 @@ toggleRow(element: any): void {
   }
 
   downloadFile(file: GeneratedFile): void {
-    // Implement file download logic here
-    console.log(`Downloading ${file.fileName}...`);
     this.invoiceService.downloadFile(file.fileName).subscribe(
       (response: Blob) => {
         console.log('file', response);
@@ -138,8 +142,11 @@ toggleRow(element: any): void {
       
       // Remove the anchor element from the body
       document.body.removeChild(link);
-        
     })
+  }
+
+  getRegionName(value: string): string {
+    return this.cityService.getName(value);
   }
 
   onGenerate(){

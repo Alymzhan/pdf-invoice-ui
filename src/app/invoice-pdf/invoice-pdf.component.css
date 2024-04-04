@@ -37,7 +37,7 @@
 }  
 
 .selected-file-label {
-    display: inline-block;
+    display: flex;
     background-color: lightgreen;
     padding: 5px 10px;
     border-radius: 4px;

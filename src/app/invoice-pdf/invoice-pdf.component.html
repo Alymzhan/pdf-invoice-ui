@@ -10,23 +10,21 @@
           <p>1. Выберите Регион</p>
           <mat-form-field style="width: 300px;">
             <mat-label>Регион</mat-label>
-            <mat-select>
-              <mat-option value="moscow">Москва</mat-option>
-              <mat-option value="nalchik">Нальчик</mat-option>
-              <mat-option value="dagestan">Дагестан</mat-option>
+            <mat-select [(value)]="selectedCity">
+              <mat-option *ngFor="let city of cities" [value]="city.value">{{ city.name }}</mat-option>
             </mat-select>
             <mat-hint align="end"></mat-hint>
           </mat-form-field>
           <mat-divider></mat-divider>
-          <p>2. Загрузить файл Excel (<a href="/file/example.xlsx">Образец файла Excel</a>)</p>
+          <p>2. Выберите файл (<a href="/file/example.xlsx">Образец файла Excel</a>)</p>
           <div *ngIf="selectedFileName" class="selected-file-label">
             Выбранный файл: {{ selectedFileName }}
           </div>
-            <input #xlsxInput hidden="true" type="file" onclick="this.value=null" (change)="xlsxInputChange($event)" accept=".xlsx"/>
-            <button mat-flat-button color="primary" (click)="xlsxInput.click()">Выберите файл (Excel)</button>
+          <input #xlsxInput hidden="true" type="file" onclick="this.value=null" (change)="xlsxInputChange($event)" accept=".xlsx"/>
+          <button mat-flat-button class="file-item" color="primary" (click)="xlsxInput.click()">Выбрать</button>
           <mat-divider></mat-divider>
-          <p>3. Загрузить и сгенерировать Акты</p>
-          <button mat-flat-button color="primary" [disabled]="!formData" (click)="onGenerate()">Загрузить файл</button>
+          <p>3. Загрузите файл и сгенерируйте акты</p>
+          <button mat-flat-button color="primary" [disabled]="!formData" (click)="onGenerate()">Загрузить</button>
         </mat-card-content>
         <mat-card-actions class="center">
             <div *ngIf="showFinishText" class="finish-text">{{finishText}}</div>
@@ -52,6 +50,10 @@
               <th mat-header-cell *matHeaderCellDef class="mat-column-sourceFileName"> Наименование файла </th>
               <td mat-cell *matCellDef="let element" class="mat-column-sourceFileName"> {{ element.originalFileName? element.originalFileName: element.fileName}} </td>
           </ng-container>
+          <ng-container matColumnDef="region">
+            <th mat-header-cell *matHeaderCellDef class="mat-column-sourceFileName"> Регион </th>
+            <td mat-cell *matCellDef="let element" class="mat-column-sourceFileName"> {{ getRegionName(element.region) }} </td>
+        </ng-container>
           <ng-container matColumnDef="size">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Размер файла </th>
             <td mat-cell *matCellDef="let element"> {{ element.size | fileSize }} </td>

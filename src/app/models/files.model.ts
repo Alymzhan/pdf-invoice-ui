@@ -10,6 +10,7 @@ export class Files {
     userid: number;
     files: GeneratedFile[] | null;
     contentType: string;
+    region: string;
   }
   
   export class GeneratedFile {
