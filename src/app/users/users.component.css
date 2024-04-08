@@ -1,48 +1,72 @@
-table {
-    width: 100%;
-  }
-  
-  tr.example-detail-row {
-    height: 0;
-  }
-  
-  tr.example-element-row:not(.example-expanded-row):hover {
-    background: whitesmoke;
-  }
-  
-  tr.example-element-row:not(.example-expanded-row):active {
-    background: #efefef;
-  }
-  
-  .example-element-row td {
-    border-bottom-width: 0;
-  }
-  
-  .example-element-detail {
-    overflow: hidden;
-    display: flex;
-  }
-  
-  .example-element-diagram {
-    min-width: 80px;
-    border: 2px solid black;
-    padding: 8px;
-    font-weight: lighter;
-    margin: 8px 0;
-    height: 104px;
-  }
-  
-  .example-element-symbol {
-    font-weight: bold;
-    font-size: 40px;
-    line-height: normal;
-  }
-  
-  .example-element-description {
-    padding: 16px;
-  }
-  
-  .example-element-description-attribution {
-    opacity: 0.5;
-  }
-  
+/* .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.table-container {
+  width: 80%; 
+} */
+
+
+.container {
+  display: flex;
+  flex-direction: column; /* Display items in a column layout */
+  justify-content: center; /* Center the items horizontally */
+  align-items: center; /* Center the items vertically */
+}
+
+.button-container {
+  width: 800px; /* Make button container take full width */
+}
+
+.table-container {
+  width: 800px; /* Adjust the width of the table container as needed */
+  margin-top: 20px; /* Add top margin to create space between button and table */
+}
+
+.title-container {
+  flex: 1; /* Make the title container take the available space */
+}
+
+
+.mat-table {
+  width: 100%;
+  overflow-x: auto; /* Enable horizontal scrolling for the table */
+}
+
+.mat-header-row, .mat-row {
+  display: flex; /* Display table rows as flex containers */
+  width: 100%;
+  box-sizing: border-box; /* Include padding and border in the width */
+}
+
+.mat-header-cell, .mat-cell {
+  flex: 1; /* Distribute cell width evenly */
+  padding: 12px; /* Adjust padding as needed */
+  border-bottom: 1px solid #e0e0e0; /* Add bottom border to cells */
+  word-wrap: break-word; /* Wrap long words in cells */
+}
+
+.mat-header-cell {
+  font-weight: bold; /* Make header cells bold */
+  background-color: #f5f5f5; /* Light background color for header cells */
+}
+
+.mat-row {
+  background-color: #fff; /* Alternate row background color */
+}
+
+.mat-row:nth-child(even) {
+  background-color: #f9f9f9; /* Alternate row background color */
+}
+
+.mat-row:hover {
+  background-color: #f0f0f0; /* Hover color for rows */
+}
+
+.mat-icon-button {
+  margin: 0 4px; /* Adjust button margin as needed */
+  min-width: auto; /* Remove minimum width for icon buttons */
+}

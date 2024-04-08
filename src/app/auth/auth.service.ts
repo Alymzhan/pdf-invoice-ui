@@ -5,7 +5,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { throwError, BehaviorSubject } from 'rxjs';
 
 import { User } from './user.model';
-import { Roles, UserResponse } from '../models/user.model';
+import { UserResponse, UsersResponse } from '../models/user.model';
 
 export interface AuthResponseData {
   kind: string;
@@ -41,9 +41,9 @@ export class AuthService {
           this.handleAuthentication(
             resData.User.userName,
             resData.User.ID, 
-            resData.User.roles, 
             resData.User.name, 
             resData.User.phone_number, 
+            resData.User.config, 
             resData.User.token
           );
         })
@@ -67,36 +67,12 @@ export class AuthService {
             this.handleAuthentication(
                 resData.User.userName,
                 resData.User.ID, 
-                resData.User.roles, 
                 resData.User.name, 
                 resData.User.phone_number, 
+                resData.User.config,
                 resData.User.token
               );
           } 
-        })
-      );
-  }
-
-  login2(email: string, password: string) {
-    return this.http
-      .post(
-        '/api/user/login',
-        {
-          userName: email,
-          password: password,
-        }
-      )
-      .pipe(
-        catchError(this.handleError),
-        tap(resData => {
-          // debugger;
-          console.log('response', resData);
-          // this.handleAuthentication(
-          //   resData.email,
-          //   resData.localId,
-          //   resData.idToken,
-          //   +resData.expiresIn
-          // );
         })
       );
   }
@@ -114,9 +90,9 @@ export class AuthService {
     const loadedUser = new User(
       userData.userName,
       userData.id, 
-      userData.roles, 
-      userData.name, 
+      userData.name,  
       userData.phone_number, 
+      userData.config,
       userData.token,
       userData.tokenExpirationDate
     );
@@ -149,14 +125,14 @@ export class AuthService {
   private handleAuthentication(
     userName: string,
     id: number,
-    roles: Roles,
     name: string,
     phone_number: string,
+    config: any,
     token: string,
     expiresIn: number = 86400
   ) {
     const expirationDate = new Date(new Date().getTime() + expiresIn * 1000); //86400sec == 24hr, or it will expire in one day
-    const user = new User(userName, id, roles, name, phone_number, token, expirationDate);
+    const user = new User(userName, id, name, phone_number, config, token, expirationDate);
     this.user.next(user);
     this.autoLogout(expiresIn * 1000);
     localStorage.setItem('userData', JSON.stringify(user));

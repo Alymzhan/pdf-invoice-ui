@@ -1,10 +1,16 @@
 export class UserResponse {
-    User: User;
+    User: Users;
+    message: string;
+    status: boolean;
+  }
+
+  export class UsersResponse {
+    Users: Users[];
     message: string;
     status: boolean;
   }
   
-  export class User {
+  export class Users {
     ID: number;
     CreatedAt: string;
     UpdatedAt: string;
@@ -14,10 +20,11 @@ export class UserResponse {
     token: string;
     name: string;
     phone_number: string;
-    roles: Roles;
+    config: Config;
     isActive: boolean;
   }
-  
-  export class Roles {
+
+  export class Config {
     roles: string[];
+    region: string[];
   }

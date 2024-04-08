@@ -1,0 +1,20 @@
+.mat-dialog-content {
+    padding: 20px; /* Adjust content padding as needed */
+  }
+  
+  .mat-form-field {
+    width: 100%; /* Make form fields full width */
+    margin-bottom: 20px; /* Adjust margin between form fields */
+  }
+  
+  .mat-dialog-actions {
+    justify-content: flex-end; /* Align actions to the right */
+    margin-top: 20px; /* Add margin to separate actions from content */
+  }
+
+  .regions-container {
+    height: 200px; /* Set the fixed height */
+    overflow-y: auto; /* Apply vertical scrollbar if needed */
+  }
+  
+  

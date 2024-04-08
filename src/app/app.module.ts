@@ -21,6 +21,7 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatInputModule} from '@angular/material/input';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSortModule} from '@angular/material/sort';
@@ -33,6 +34,11 @@ import { FileTableComponent } from './file-table/file-table.component';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { AuthComponent } from './auth/auth.component';
 import { FileSizePipe } from './file-size.pipe';
+import { EditUserDialogComponent } from './edit-user-dialog/edit-user-dialog.component';
+import { AddUserDialogComponent } from './add-user-dialog/add-user-dialog.component';
+import { MatTreeModule } from '@angular/material/tree';
+import { DeleteUserConfirmationDialogComponent } from './delete-user-confirmation-dialog/delete-user-confirmation-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -43,7 +49,10 @@ import { FileSizePipe } from './file-size.pipe';
     AppHeaderComponent,
     FileTableComponent,
     AuthComponent,
-    FileSizePipe
+    FileSizePipe,
+    EditUserDialogComponent,
+    AddUserDialogComponent,
+    DeleteUserConfirmationDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -64,6 +73,9 @@ import { FileSizePipe } from './file-size.pipe';
     MatInputModule,
     MatTableModule,
     MatExpansionModule,
+    MatTreeModule,
+    MatDialogModule,
+    MatCheckboxModule,
     MatListModule,
     HttpClientModule,
     ReactiveFormsModule,

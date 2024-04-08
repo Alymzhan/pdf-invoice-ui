@@ -7,6 +7,8 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { CityService } from '../shared/city.service';
+import { User } from '../auth/user.model';
+import { AuthService } from '../auth/auth.service';
 
 export interface TableData {
   uploadDateTime: string;
@@ -44,15 +46,21 @@ export class InvoicePdfComponent implements OnInit, OnDestroy{
   finishText='Done!';
   columnsToDisplay = ['ID', 'CreatedAt', 'fileName', 'region', 'size', 'status', 'downloadLink'];
   columnsToDisplayWithExpand = ['expand', ...this.columnsToDisplay];
+  isAuthenticated = false;
+  private userSub: Subscription;
+  user: User | null;
 
   cities = this.cityService.cities;
   selectedCity: string = this.cities[0].value;
 
   constructor(private invoiceService: InvoicePDFService,
     private cityService: CityService,
-    // private router: Router,
-    // private route: ActivatedRoute
+    private authService: AuthService
     ) {
+      this.userSub = this.authService.user.subscribe(user => {
+        this.isAuthenticated = !!user;
+        this.user = user;
+      });
 }
 
 toggleRow(element: any): void {
@@ -60,7 +68,9 @@ toggleRow(element: any): void {
 }
 
   ngOnInit() {
-    this.subscription = this.invoiceService.getFiles().subscribe(files => {
+    
+
+    this.subscription = this.invoiceService.getFiles(this.user? this.user?.id : 0).subscribe(files => {
       this.updateTable(files.Files)
     });
   }

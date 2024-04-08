@@ -1,0 +1,49 @@
+<mat-card>
+    <mat-card-header>
+      <mat-card-title>Изменить</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <form #userForm="ngForm">
+            <mat-form-field style="width: 100%;" appearance="fill">
+              <input matInput placeholder="Имя" [(ngModel)]="user.name" name="name" required minlength="3">
+              <mat-error *ngIf="userForm.controls['name']?.invalid && (userForm.controls['name']?.dirty || userForm.controls['name']?.touched)">
+                Имя должно содержать не менее 3 символов
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field style="width: 100%;" appearance="fill">
+              <input matInput placeholder="Логин" [(ngModel)]="user.userName" name="userName" required minlength="3">
+              <mat-error *ngIf="userForm.controls['userName']?.invalid && (userForm.controls['userName']?.dirty || userForm.controls['userName']?.touched)">
+                Логин должен содержать не менее 3 символов
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field style="width: 100%;" appearance="fill">
+                <input matInput placeholder="Номер телефона" [(ngModel)]="user.phone_number" name="phone_number" required minlength="5">
+                <mat-error *ngIf="userForm.controls['phone_number']?.invalid && (userForm.controls['phone_number']?.dirty || userForm.controls['phone_number']?.touched)">
+                  Номер телефона должен содержать не менее 5 символов
+                </mat-error>
+              </mat-form-field>
+            <!-- <mat-form-field style="width: 100%;" appearance="fill">
+              <input matInput placeholder="Пароль" [(ngModel)]="user.password" name="password" required minlength="5" [type]="hide ? 'password' : 'text'">
+              <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Toggle password visibility'">
+                <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+              <mat-error *ngIf="userForm.controls['password']?.invalid && (userForm.controls['password']?.dirty || userForm.controls['password']?.touched)">
+                Пароль должен содержать не менее 5 символов
+              </mat-error>
+            </mat-form-field> -->
+          </form>
+      <mat-divider></mat-divider>
+      <div class="regions-container">
+        <h4>Регионы</h4>
+        <div *ngFor="let region of allRegions" class="region-checkbox">
+          <mat-checkbox [(ngModel)]="userRegions[region.value]" name="regions">{{ region.name }}</mat-checkbox>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-divider></mat-divider>
+    <mat-card-actions>
+      <button mat-button (click)="onCancel()">Отмена</button>
+      <button mat-button color="primary" [disabled]="userForm.invalid" (click)="onSave()">Сохранить</button>
+    </mat-card-actions>
+  </mat-card>
+  

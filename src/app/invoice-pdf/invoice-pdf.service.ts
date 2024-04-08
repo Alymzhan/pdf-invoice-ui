@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, OnInit } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { AuthService } from '../auth/auth.service';
 import { UploadedFile } from '../models/uploadFiles.model';
@@ -27,10 +27,10 @@ export class InvoicePDFService {
         // });
     }
 
-    getFiles() {
+    getFiles(id: number) {
         return this.http
         .get<FileResponseData>(
-            '/api/getDashboard/1'
+            `/api/getDashboard/${id}`
         );
     }
 

@@ -1,11 +1,9 @@
-import { Roles } from "../models/user.model";
-
 export class User {
   constructor(
     public userName: string,
     public id: number,
-    public roles: Roles,
     public name: string,
+    public config: any,
     public phone_number: string,
     public token: string,
     public tokenExpirationDate: Date,

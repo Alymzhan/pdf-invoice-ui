@@ -1,30 +1,30 @@
 <mat-toolbar color="primary">
-    <button mat-icon-button aria-label="Icon-button" [matMenuTriggerFor]="menu">
+    <button mat-icon-button aria-label="Иконка" [matMenuTriggerFor]="menu">
         <mat-icon>menu</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
         <button mat-menu-item (click)="invoice()">
             <mat-icon>receipt</mat-icon>
-            Create Invoice PDF
+            Создать счет-фактуру PDF
         </button>
-        <button mat-menu-item (click)="reports()">
+        <button mat-menu-item disabled (click)="reports()">
             <mat-icon>assessment</mat-icon>
-            Reports
+            Отчеты
         </button>
-        <button mat-menu-item [matMenuTriggerFor]="admin"><mat-icon>settings</mat-icon> Settings</button>
+        <button mat-menu-item [matMenuTriggerFor]="admin"><mat-icon>settings</mat-icon> Настройки</button>
         <mat-menu #admin="matMenu">
-            <button mat-menu-item (click)="settings()">
+            <button mat-menu-item disabled (click)="settings()">
                 <mat-icon>build</mat-icon>
-                Invoice settings
+                Настройки счетов-фактур
             </button>
             <button mat-menu-item (click)="users()">
                 <mat-icon>group</mat-icon>
-                Users
+                Пользователи
             </button>
         </mat-menu>
         <button mat-menu-item (click)="logout()">
             <mat-icon>exit_to_app</mat-icon>
-            Log out {{username}}
+            Выйти {{username}}
         </button>
     </mat-menu>
     <span>АРМ "Отчетность PDF"</span>
@@ -33,7 +33,7 @@
     <button
       mat-icon-button
       class="example-icon"
-      aria-label="User icon"
+      aria-label="Иконка пользователя"
     >
       <mat-icon>account_circle</mat-icon>
     </button>
