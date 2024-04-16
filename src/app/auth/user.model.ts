@@ -18,6 +18,10 @@ export class User {
     }
     return this.token;
   }
+
+  get isAdmin():boolean {
+    return this.config.roles.includes('Core') || this.config.roles.includes('Root') || false;
+  } 
 }
 
 export class Config {

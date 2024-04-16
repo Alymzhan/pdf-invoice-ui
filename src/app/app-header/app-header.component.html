@@ -11,7 +11,7 @@
             <mat-icon>assessment</mat-icon>
             Отчеты
         </button>
-        <button mat-menu-item [matMenuTriggerFor]="admin"><mat-icon>settings</mat-icon> Настройки</button>
+        <button mat-menu-item *ngIf="isAdmin" [matMenuTriggerFor]="admin"><mat-icon>settings</mat-icon> Настройки</button>
         <mat-menu #admin="matMenu">
             <button mat-menu-item disabled (click)="settings()">
                 <mat-icon>build</mat-icon>

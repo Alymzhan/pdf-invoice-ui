@@ -9,8 +9,9 @@ import { Subscription } from 'rxjs';
   styleUrl: './app-header.component.css'
 })
 export class AppHeaderComponent implements OnInit, OnDestroy{
-  username = 'Donald T.'
+  username = 'Неизвестный пользователь'
   isAuthenticated = false;
+  isAdmin = false;
   private userSub: Subscription;
 
   constructor(private router: Router,
@@ -19,7 +20,10 @@ export class AppHeaderComponent implements OnInit, OnDestroy{
   ngOnInit() {
     this.userSub = this.authService.user.subscribe(user => {
       this.isAuthenticated = !!user;
-      this.username = user?.name || '';
+      if (user) {
+        this.username = user.name;
+        this.isAdmin = user.isAdmin;
+      }
     });
   }
 
