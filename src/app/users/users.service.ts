@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Config, UserResponse, UsersResponse } from '../models/user.model';
+import { Config, UserResponse, Users, UsersResponse } from '../models/user.model';
 import { catchError, tap, throwError } from 'rxjs';
+import { User } from '../auth/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class UsersService {
@@ -37,6 +38,24 @@ export class UsersService {
             phone_number: phone_number,
             config: config,
         }
+      )
+      .pipe(
+        catchError(this.handleError),
+        tap(resData => {
+            console.log('response new user1', resData);
+          if (resData.status) {
+            console.log('response new user2', resData);
+          } 
+        })
+      );
+  }
+
+  editUser(user: Users) {
+    const url = `/api/user/${user.ID}`;
+    return this.http
+      .put<UserResponse>(
+        url,
+        user
       )
       .pipe(
         catchError(this.handleError),

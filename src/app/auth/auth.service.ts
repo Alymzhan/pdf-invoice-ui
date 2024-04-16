@@ -25,31 +25,6 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  signup(email: string, password: string) {
-    return this.http
-      .post<UserResponse>(
-        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyAvcex4MoXBfqHyFJWt7pDryvREfYg3v80',
-        {
-          email: email,
-          password: password,
-          returnSecureToken: true
-        }
-      )
-      .pipe(
-        catchError(this.handleError),
-        tap(resData => {
-          this.handleAuthentication(
-            resData.User.userName,
-            resData.User.ID, 
-            resData.User.name, 
-            resData.User.phone_number, 
-            resData.User.config, 
-            resData.User.token
-          );
-        })
-      );
-  }
-
   login(email: string, password: string) {
     return this.http
       .post<UserResponse>(
@@ -63,7 +38,6 @@ export class AuthService {
         catchError(this.handleError),
         tap(resData => {
           if (resData.status) {
-            console.log('response', resData);
             this.handleAuthentication(
                 resData.User.userName,
                 resData.User.ID, 

@@ -43,7 +43,6 @@ export class AddUserDialogComponent {
     newUser.config.region = userSelectedRegions;
 
     // Handle saving the new user data
-    console.log('newUser', newUser);
     this.dialogRef.close(newUser);
   }
 }

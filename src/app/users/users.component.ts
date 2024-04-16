@@ -45,43 +45,96 @@ export class UsersComponent implements OnInit, OnDestroy{
     });
 
     dialogRef.afterClosed().subscribe(updatedUser => {
+      // Обработка результата после закрытия диалогового окна
       if (updatedUser) {
-        // Update user in your array or send request to update user in backend
-        console.log('User updated:', updatedUser);
+        // Добавление нового пользователя в список пользователей или выполнение других действий
+        this.userSub = this.usersService.editUser(updatedUser).subscribe(
+          resData => {
+            if (resData.status) {
+              console.log(resData);
+              // Показать сообщение об успехе
+              this.snackBar.open('Пользователь успешно изменен', 'Закрыть', {
+                duration: 3000,
+                verticalPosition: 'top',
+                horizontalPosition: 'center',
+              });
+              // Обновление данных пользователей после добавления нового пользователя
+              this.refreshUsersData();
+            } else {
+              console.log(resData.message);
+              this.error = this.handleErrorMessage(resData.message);
+              // Показать сообщение об ошибке
+              this.snackBar.open(this.error, 'Закрыть', {
+                duration: 3000,
+                verticalPosition: 'top',
+                horizontalPosition: 'center',
+              });
+            }
+          },
+          errorMessage => {
+            console.log(errorMessage);
+            this.error = errorMessage;
+            // Показать сообщение об ошибке
+            this.snackBar.open(this.error, 'Закрыть', {
+              duration: 3000,
+              verticalPosition: 'top',
+              horizontalPosition: 'center',
+            });
+          }
+        );
       }
     });
   }
 
   openAddUserDialog(): void {
     const dialogRef = this.dialog.open(AddUserDialogComponent, {
-      width: '400px', // Set the width as per your requirement
-      disableClose: true, // Prevent closing the dialog by clicking outside
+      width: '400px', // Установите ширину по вашему усмотрению
+      disableClose: true, // Предотвращение закрытия диалогового окна при клике вне его области
     });
-
+  
     dialogRef.afterClosed().subscribe(result => {
-      // Handle the result after dialog is closed
+      // Обработка результата после закрытия диалогового окна
       if (result) {
-        // Add the new user to the users list or perform any other action
-        console.log('New user added:', result);
+        // Добавление нового пользователя в список пользователей или выполнение других действий
+        console.log('Новый пользователь добавлен:', result);
         this.userSub = this.usersService.addNewUser(result.name, result.userName, result.password, result.phone_number, result.config).subscribe(
           resData => {
             if (resData.status) {
               console.log(resData);
-              // Refresh users data after adding the new user
+              // Показать сообщение об успехе
+              this.snackBar.open('Новый пользователь успешно добавлен', 'Закрыть', {
+                duration: 3000,
+                verticalPosition: 'top',
+                horizontalPosition: 'center',
+              });
+              // Обновление данных пользователей после добавления нового пользователя
               this.refreshUsersData();
             } else {
               console.log(resData.message);
               this.error = this.handleErrorMessage(resData.message);
+              // Показать сообщение об ошибке
+              this.snackBar.open(this.error, 'Закрыть', {
+                duration: 3000,
+                verticalPosition: 'top',
+                horizontalPosition: 'center',
+              });
             }
           },
           errorMessage => {
             console.log(errorMessage);
             this.error = errorMessage;
+            // Показать сообщение об ошибке
+            this.snackBar.open(this.error, 'Закрыть', {
+              duration: 3000,
+              verticalPosition: 'top',
+              horizontalPosition: 'center',
+            });
           }
         );
       }
     });
   }
+  
 
   private refreshUsersData(): void {
     this.subscription = this.usersService.getUsers(this.user ? this.user.id: 0).subscribe(users => {
@@ -90,8 +143,7 @@ export class UsersComponent implements OnInit, OnDestroy{
   }
 
   private handleErrorMessage(errorRes: string) {
-    console.log('here', errorRes);
-    let errorMessage = 'Неверный логин или пароль!';
+    let errorMessage = 'Неизвестная ошибка. Обратитесь к Администратору';
     if (!errorRes) {
       return errorMessage;
     }

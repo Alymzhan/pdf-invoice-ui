@@ -3,8 +3,11 @@ export class User {
     public userName: string,
     public id: number,
     public name: string,
-    public config: any,
     public phone_number: string,
+    public config: {
+      roles: string[];
+      region: string[];
+    },
     public token: string,
     public tokenExpirationDate: Date,
   ) {}
@@ -15,4 +18,9 @@ export class User {
     }
     return this.token;
   }
+}
+
+export class Config {
+  roles: string[];
+  region: string[];
 }

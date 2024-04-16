@@ -60,12 +60,15 @@ export class InvoicePdfComponent implements OnInit, OnDestroy{
       this.userSub = this.authService.user.subscribe(user => {
         this.isAuthenticated = !!user;
         this.user = user;
+        if (!this.user?.config.region.includes('All')) {
+          this.cities = this.cities.filter(city => this.user?.config.region.includes(city.value));
+        }
       });
-}
+    }
 
-toggleRow(element: any): void {
-  this.expandedElement = this.expandedElement === element ? null : element;
-}
+  toggleRow(element: any): void {
+    this.expandedElement = this.expandedElement === element ? null : element;
+  } 
 
   ngOnInit() {
     
@@ -134,7 +137,6 @@ toggleRow(element: any): void {
   downloadFile(file: GeneratedFile): void {
     this.invoiceService.downloadFile(file.fileName).subscribe(
       (response: Blob) => {
-        console.log('file', response);
       const fileBlob = new Blob([response], { type: file.contentType });
       
       // Create a temporary anchor element

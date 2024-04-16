@@ -37,7 +37,6 @@ export class EditUserDialogComponent {
 
   onSave(): void {
     // Emit the updated user data and close the dialog
-    console.log('User regions:', this.userRegions);
     this.dialogRef.close(this.user);
   }
 

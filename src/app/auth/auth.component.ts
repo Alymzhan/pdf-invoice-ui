@@ -34,17 +34,14 @@ export class AuthComponent {
     authObs.subscribe(
       resData => {
         if (resData.status) {
-          console.log(resData);
           this.isLoading = false;
           this.router.navigate(['/invoice']);
         } else {
-          console.log(resData.message);
           this.error = this.handleErrorMessage(resData.message);
           this.isLoading = false;
         }
       },
       errorMessage => {
-        console.log(errorMessage);
         this.error = errorMessage;
         this.isLoading = false;
       }
@@ -54,8 +51,6 @@ export class AuthComponent {
   }
 
   private handleErrorMessage(errorRes: string) {
-
-    console.log('here', errorRes);
     let errorMessage = 'Неверный логин или пароль!';
     if (!errorRes) {
       return errorMessage;

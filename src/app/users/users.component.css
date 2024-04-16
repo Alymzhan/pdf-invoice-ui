@@ -18,11 +18,11 @@
 }
 
 .button-container {
-  width: 800px; /* Make button container take full width */
+  width: 900px; /* Make button container take full width */
 }
 
 .table-container {
-  width: 800px; /* Adjust the width of the table container as needed */
+  width: 900px; /* Adjust the width of the table container as needed */
   margin-top: 20px; /* Add top margin to create space between button and table */
 }
 

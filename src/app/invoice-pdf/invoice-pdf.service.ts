@@ -22,7 +22,6 @@ export class InvoicePDFService {
             formData,
         );
         // .subscribe(response => {
-        //     console.log(response);
         //     // this.filesChanged.next(this.files.slice());
         // });
     }
