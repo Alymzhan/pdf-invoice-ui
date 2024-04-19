@@ -3,6 +3,6 @@
   <p>Вы уверены, что хотите удалить пользователя "{{ user.name }}"?</p>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close color="primary" (click)="onCancel()">Отмена</button>
-  <button mat-button color="warn" (click)="confirmDelete()">Удалить</button>
+  <button mat-button (click)="onCancel()">Отмена</button>
+  <button mat-button color="primary" (click)="confirmDelete()">Удалить</button>
 </mat-dialog-actions>

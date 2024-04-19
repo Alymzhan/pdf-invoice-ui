@@ -21,7 +21,7 @@
             Выбранный файл: {{ selectedFileName }}
           </div>
           <input #xlsxInput hidden="true" type="file" onclick="this.value=null" (change)="xlsxInputChange($event)" accept=".xlsx"/>
-          <button mat-flat-button class="file-item" color="primary" (click)="xlsxInput.click()">Выбрать</button>
+          <button mat-flat-button class="file-item" color="primary" (click)="xlsxInput.click()">Выбрать</button>  
           <mat-divider></mat-divider>
           <p>3. Загрузите файл и сгенерируйте акты</p>
           <button mat-flat-button color="primary" [disabled]="!formData" (click)="onGenerate()">Загрузить</button>

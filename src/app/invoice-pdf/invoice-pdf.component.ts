@@ -9,6 +9,7 @@ import { MatSort } from '@angular/material/sort';
 import { CityService } from '../shared/city.service';
 import { User } from '../auth/user.model';
 import { AuthService } from '../auth/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export interface TableData {
   uploadDateTime: string;
@@ -55,7 +56,8 @@ export class InvoicePdfComponent implements OnInit, OnDestroy{
 
   constructor(private invoiceService: InvoicePDFService,
     private cityService: CityService,
-    private authService: AuthService
+    private authService: AuthService,
+    private snackBar: MatSnackBar
     ) {
       this.userSub = this.authService.user.subscribe(user => {
         this.isAuthenticated = !!user;
@@ -94,14 +96,6 @@ export class InvoicePdfComponent implements OnInit, OnDestroy{
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-  }
-
-  xlsxInputChange(fileInputEvent: any) {
-    this.showFinishText = false;
-    const file = fileInputEvent.target.files[0];
-    this.selectedFileName = file ? file.name : null;
-    this.formData = new FormData();
-    this.formData.append('file', file);
   }
 
   uploadFile(formData: FormData) {
@@ -160,6 +154,39 @@ export class InvoicePdfComponent implements OnInit, OnDestroy{
   getRegionName(value: string): string {
     return this.cityService.getName(value);
   }
+
+  // Метод для проверки размера загружаемого файла
+fileSizeExceedsLimit(file: File): boolean {
+  const fileSizeInMB = file.size / (1024 * 1024); // Преобразование размера в мегабайты
+  return fileSizeInMB > 2; // Проверка, превышает ли размер файла 2 МБ
+}
+
+xlsxInputChange(fileInputEvent: any): void {
+  this.showFinishText = false;
+  const file = fileInputEvent.target.files[0];
+  if (file) {
+    if (this.fileSizeExceedsLimit(file)) {
+      // Сбросить выбранный файл и вывести сообщение об ошибке с использованием MatSnackBar
+      this.selectedFileName = null;
+      this.formData = null;
+      this.snackBar.open('Размер файла превышает 2 Мб. Пожалуйста, выберите файл размером менее 2 Мб.', 'Закрыть', {
+        duration: 5000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+      });
+    } else {
+      // Добавить файл в FormData
+      this.selectedFileName = file.name;
+      this.formData = new FormData();
+      this.formData.append('file', file);
+    }
+  } else {
+    // Если файл не выбран, сбросить данные
+    this.selectedFileName = null;
+    this.formData = null;
+  }
+}
+
 
   onGenerate(){
     if (this.formData) {
