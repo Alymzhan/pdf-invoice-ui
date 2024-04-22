@@ -19,6 +19,10 @@ export interface TableData {
   downloadLink: string;
 }
 
+interface StatusTranslations {
+  [status: string]: string;
+}
+
 @Component({
   selector: 'app-invoice-pdf',
   templateUrl: './invoice-pdf.component.html',
@@ -72,9 +76,17 @@ export class InvoicePdfComponent implements OnInit, OnDestroy{
     this.expandedElement = this.expandedElement === element ? null : element;
   } 
 
-  ngOnInit() {
-    
+  statusTranslations: StatusTranslations = {
+    'Complete': 'Завершено',
+    'Pending': 'Ожидание',
+    'Failed': 'Ошибка'
+  };
 
+  translateStatus(status: string): string {
+    return this.statusTranslations[status] || status;
+  }
+
+  ngOnInit() {
     this.subscription = this.invoiceService.getFiles(this.user? this.user?.id : 0).subscribe(files => {
       this.updateTable(files.Files)
     });
@@ -96,6 +108,7 @@ export class InvoicePdfComponent implements OnInit, OnDestroy{
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.userSub.unsubscribe();
   }
 
   uploadFile(formData: FormData) {
@@ -106,7 +119,7 @@ export class InvoicePdfComponent implements OnInit, OnDestroy{
         if (response.status) {
           // Handle successful file upload response
           this.showFinishText = true;
-          this.finishText = 'Файл успешно загружен.';
+          this.finishText = 'Файл добавлен в очередь загрузки.';
           this.showProgressBar = false;
           const updatedFiles = [...this.files.data, response.File];
           this.updateTable(updatedFiles)
@@ -186,7 +199,6 @@ xlsxInputChange(fileInputEvent: any): void {
     this.formData = null;
   }
 }
-
 
   onGenerate(){
     if (this.formData) {

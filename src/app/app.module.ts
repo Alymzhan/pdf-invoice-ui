@@ -39,6 +39,8 @@ import { AddUserDialogComponent } from './add-user-dialog/add-user-dialog.compon
 import { MatTreeModule } from '@angular/material/tree';
 import { DeleteUserConfirmationDialogComponent } from './delete-user-confirmation-dialog/delete-user-confirmation-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ReportsComponent } from './reports/reports.component';
+import { ReportDetailComponent } from './report-detail/report-detail.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +54,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     FileSizePipe,
     EditUserDialogComponent,
     AddUserDialogComponent,
-    DeleteUserConfirmationDialogComponent
+    DeleteUserConfirmationDialogComponent,
+    ReportsComponent,
+    ReportDetailComponent
   ],
   imports: [
     BrowserModule,

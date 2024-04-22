@@ -1,0 +1,13 @@
+/* Add styling for child table */
+.child-table-container {
+    margin-top: 20px;
+  }
+  
+  p {
+    font-weight: bold;
+  }
+
+  .mat-mdc-form-field {
+    font-size: 14px;
+    width: 100%;
+  }

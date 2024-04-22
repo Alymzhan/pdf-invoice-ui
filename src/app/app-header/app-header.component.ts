@@ -48,7 +48,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy{
 
   reports(): void {
     //to do
-    this.router.navigate(['']);
+    this.router.navigate(['/reports']);
   }
 
   ngOnDestroy() {

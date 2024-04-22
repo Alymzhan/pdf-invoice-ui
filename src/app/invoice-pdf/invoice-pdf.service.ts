@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http'
 import { AuthService } from '../auth/auth.service';
 import { UploadedFile } from '../models/uploadFiles.model';
 import { Subject } from 'rxjs';
-import { FileResponseData, UploadFileResponseData } from '../models/files.model';
+import { FileResponseData, OneFileResponseData, UploadFileResponseData } from '../models/files.model';
 
 @Injectable({ providedIn: 'root' })
 
@@ -30,6 +30,13 @@ export class InvoicePDFService {
         return this.http
         .get<FileResponseData>(
             `/api/getDashboard/${id}`
+        );
+    }
+
+    getFile(id: number) {
+        return this.http
+        .get<OneFileResponseData>(
+            `/api/files/file/${id}`
         );
     }
 

@@ -64,7 +64,7 @@
                   'color': element.status === 'Complete' ? 'green' : 
                            element.status === 'Pending' ? 'grey' : 
                            element.status === 'Failed' ? 'red' : 'black'
-              }"> {{element.status}} </td>
+              }"> {{ statusTranslations[element.status] }} </td>
           </ng-container>
           <ng-container matColumnDef="downloadLink">
             <th mat-header-cell *matHeaderCellDef></th>

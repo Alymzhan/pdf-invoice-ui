@@ -1,0 +1,69 @@
+<app-app-header></app-app-header>
+<div class="table-container">
+    <mat-accordion>
+        <mat-expansion-panel [expanded]="panelOpenState"  (opened)="panelOpenState = true"
+                             (closed)="panelOpenState = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+                Реестр загруженных файлов
+            </mat-panel-title>
+            <!-- <mat-panel-description>
+            {{panelOpenState ? 'Свернуть таблицу' : 'Развернуть таблицу'}}
+            </mat-panel-description> -->
+          </mat-expansion-panel-header>
+    <table mat-table
+          [dataSource]="files" multiTemplateDataRows matSort
+          class="mat-elevation-z8">
+      <ng-container matColumnDef="ID">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="flex: 0.1;"> ID </th>
+        <td mat-cell *matCellDef="let element" style="flex: 0.1;"> {{element.ID}} </td>
+      </ng-container>
+      <ng-container matColumnDef="CreatedAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-uploadDateTime"> Дата загрузки </th>
+        <td mat-cell *matCellDef="let element" class="mat-column-uploadDateTime"> {{ element.CreatedAt | date: 'M/d/yy, h:mm a' }} </td>
+      </ng-container>
+      <ng-container matColumnDef="fileName">
+          <th mat-header-cell *matHeaderCellDef class="mat-column-sourceFileName"> Наименование файла </th>
+          <td mat-cell *matCellDef="let element" class="mat-column-sourceFileName"> {{ element.originalFileName? element.originalFileName: element.fileName}} </td>
+      </ng-container>
+      <ng-container matColumnDef="region">
+        <th mat-header-cell *matHeaderCellDef class="mat-column-sourceFileName"> Регион </th>
+        <td mat-cell *matCellDef="let element" class="mat-column-sourceFileName"> {{ getRegionName(element.region) }} </td>
+    </ng-container>
+    <ng-container matColumnDef="quantity">
+        <th mat-header-cell *matHeaderCellDef class="mat-column-sourceFileName"> Количество </th>
+        <td mat-cell *matCellDef="let element" class="mat-column-sourceFileName"> {{ element.totalRecords }} чел. </td>
+    </ng-container>
+      <ng-container matColumnDef="checked">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Получено (%) </th>
+        <td mat-cell *matCellDef="let element" [ngStyle]="getStatusColor(element.completed)"> {{ element.completed }}% </td>
+    </ng-container>
+      <!-- <ng-container matColumnDef="downloadLink">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <a mat-button color="primary" (click)="downloadFile(element)" download>
+            <mat-icon>file_download</mat-icon>
+          </a>
+        </td>
+      </ng-container> -->
+      <ng-container matColumnDef="editListLink">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+            <button mat-stroked-button color="primary" (click)="openFile(element.ID)">Открыть файл</button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+      <tr mat-row *matRowDef="let element; columns: columnsToDisplay;">
+      </tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[3, 5, 10]"
+            showFirstLastButtons
+            aria-label="Select page of periodic elements">
+    </mat-paginator>
+</mat-expansion-panel>
+</mat-accordion>
+</div>
+
+<app-report-detail *ngIf="fileId!=0" [fileId]="fileId" [file] = "file"></app-report-detail>
+
+

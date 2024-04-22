@@ -1,0 +1,79 @@
+<div class="child-table-container">
+    <mat-accordion>
+        <mat-expansion-panel [expanded]="panelOpenState"  (opened)="panelOpenState = true"
+                             (closed)="panelOpenState = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+                Файл: {{ this.file?.File?.originalFileName }}, регион {{ getRegionName(this.file?.File?.region) }}
+            </mat-panel-title>
+            <!-- <mat-panel-description>
+            {{panelOpenState ? 'Свернуть таблицу' : 'Развернуть таблицу'}}
+            </mat-panel-description> -->
+          </mat-expansion-panel-header>
+
+        <mat-form-field>
+            <mat-label>Поиск</mat-label>
+            <input matInput (keyup)="applyFilter($event)" #input>
+          </mat-form-field>
+          <table mat-table
+                [dataSource]="records" multiTemplateDataRows matSort
+                class="mat-elevation-z8">
+            <ng-container matColumnDef="ssn">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> СНИЛС </th>
+                <td mat-cell *matCellDef="let element" > {{ element.CellH }} </td>
+            </ng-container>
+            <ng-container matColumnDef="sendStatus">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-uploadDateTime">Получено</th>
+                <td mat-cell *matCellDef="let element" class="mat-column-send"> <mat-checkbox [(ngModel)]="element.CellSEND"></mat-checkbox></td>
+            </ng-container>
+            <ng-container matColumnDef="fullName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-uploadDateTime"> ФИО </th>
+                <td mat-cell *matCellDef="let element" class="mat-column-uploadDateTime"> {{ element.CellB }} </td>
+            </ng-container>
+            <ng-container matColumnDef="referenceNumber">
+                <th mat-header-cell *matHeaderCellDef class="mat-column-sourceFileName"> Номер направления </th>
+                <td mat-cell *matCellDef="let element" class="mat-column-sourceFileName"> {{  element.CellI }} </td>
+            </ng-container>
+            <ng-container matColumnDef="referenceDate">
+                <th mat-header-cell *matHeaderCellDef class="mat-column-sourceFileName"> Дата направления </th>
+                <td mat-cell *matCellDef="let element" class="mat-column-sourceFileName"> {{  element.CellG }} </td>
+            </ng-container>
+            <ng-container matColumnDef="invoiceDate">
+                <th mat-header-cell *matHeaderCellDef class="mat-column-sourceFileName"> Дата акта приема-передачи Товара </th>
+                <td mat-cell *matCellDef="let element" class="mat-column-sourceFileName">
+                    <input type="text" [(ngModel)]="element.CellO" /> <!-- Add ngModel for two-way data binding -->
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="invoiceNumber">
+                <th mat-header-cell *matHeaderCellDef class="mat-column-sourceFileName"> Номер акта приема-передачи Товара </th>
+                <td mat-cell *matCellDef="let element" class="mat-column-sourceFileName"> {{ element.CellI}} </td>
+            </ng-container>
+            <ng-container matColumnDef="itemName">
+                <th mat-header-cell *matHeaderCellDef class="mat-column-sourceFileName"> Наименование Товара </th>
+                <td mat-cell *matCellDef="let element" class="mat-column-sourceFileName"> {{ element.CellK}} </td>
+            </ng-container>
+            <ng-container matColumnDef="itemDescription">
+                <th mat-header-cell *matHeaderCellDef class="mat-column-sourceFileName"> Артикул модификации Товара </th>
+                <td mat-cell *matCellDef="let element" class="mat-column-sourceFileName"> {{ element.CellL}} </td>
+            </ng-container>
+            <ng-container matColumnDef="itemQuantity">
+                <th mat-header-cell *matHeaderCellDef class="mat-column-sourceFileName"> Количество (шт.) </th>
+                <td mat-cell *matCellDef="let element" class="mat-column-sourceFileName"> {{ element.CellM}} </td>
+            </ng-container>
+            <ng-container matColumnDef="editLink">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element">
+                    <button mat-stroked-button color="primary"  [disabled]="!isRowEdited(element)" (click)="saveFile(element)">Сохранить</button>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+            <tr mat-row *matRowDef="let element; columns: columnsToDisplay;">
+            </tr>
+            </table>
+            <mat-paginator [pageSizeOptions]="[3, 5, 10]"
+                    showFirstLastButtons
+                    aria-label="Select page of periodic elements">
+            </mat-paginator>
+        </mat-expansion-panel>
+      </mat-accordion>
+</div>
