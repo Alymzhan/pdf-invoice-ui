@@ -33,7 +33,7 @@ export class ReportDetailComponent implements OnInit, OnDestroy, OnChanges{
   showProgressBar = false;
   showFinishText = false;
   finishText='Done!';
-  columnsToDisplay = ['sendStatus', 'fullName', 'ssn', 'referenceNumber', 'referenceDate', 'invoiceDate', 'invoiceNumber', 'itemName', 'itemDescription', 'itemQuantity', 'editLink'];
+  columnsToDisplay = ['sendStatus', 'fullName', 'ssn', 'referenceNumber', 'referenceDate', 'invoiceDate', 'invoiceNumber', 'itemDescription', 'itemQuantity', 'itemPrice', 'totalSum', 'editLink'];
   isAuthenticated = false;
   private userSub: Subscription;
   user: User | null;

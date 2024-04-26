@@ -15,7 +15,8 @@
             <mat-label>Поиск</mat-label>
             <input matInput (keyup)="applyFilter($event)" #input>
           </mat-form-field>
-          <table mat-table
+          <div style="overflow-x: auto;">
+            <table mat-table
                 [dataSource]="records" multiTemplateDataRows matSort
                 class="mat-elevation-z8">
             <ng-container matColumnDef="ssn">
@@ -60,6 +61,14 @@
                 <th mat-header-cell *matHeaderCellDef class="mat-column-sourceFileName"> Количество (шт.) </th>
                 <td mat-cell *matCellDef="let element" class="mat-column-sourceFileName"> {{ element.CellM}} </td>
             </ng-container>
+            <ng-container matColumnDef="itemPrice">
+                <th mat-header-cell *matHeaderCellDef class="mat-column-sourceFileName"> Цена (руб.) </th>
+                <td mat-cell *matCellDef="let element" class="mat-column-sourceFileName"> {{ element.CellPRICE}} </td>
+            </ng-container>
+            <ng-container matColumnDef="totalSum">
+                <th mat-header-cell *matHeaderCellDef class="mat-column-sourceFileName"> Сумма (руб.)</th>
+                <td mat-cell *matCellDef="let element" class="mat-column-sourceFileName"> {{ element.CellPRICE * element.CellM}} </td>
+            </ng-container>
             <ng-container matColumnDef="editLink">
                 <th mat-header-cell *matHeaderCellDef></th>
                 <td mat-cell *matCellDef="let element">
@@ -74,6 +83,8 @@
                     showFirstLastButtons
                     aria-label="Select page of periodic elements">
             </mat-paginator>
+        </div>
+          
         </mat-expansion-panel>
       </mat-accordion>
 </div>

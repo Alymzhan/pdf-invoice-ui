@@ -59,13 +59,13 @@
             "CellBINIT": "Иванова М. Е.",
             "CellPRICE": "26",
             "originalCellO": "08.09.2025",
-            "originalCellSEND": false,
-            "CellTotalItems": "3",
-            "CellTotalAmount": "100"
+            "originalCellSEND": false
         }
     ],
     "totalRecords": 1,
     "completed": 1,
+    "totalItems": "3",
+    "totalAmount": "100",
     "registerNumber": "123456",
     "registerDate": "01-01-2024",
     "contactDate": "№ 13/01 от 13.02.2024 г.",

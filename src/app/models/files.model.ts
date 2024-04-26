@@ -15,6 +15,12 @@ export class Files {
     records: Records[];
     totalRecords: number;
     completed: number;
+    totalItems: number;
+    totalAmount: number;
+    registerNumber: number;
+    registerDate: string;
+    contactDate: string;
+    titleInfo: string;
   }
 
   export interface Records {
@@ -52,6 +58,7 @@ export class Files {
     CellH10: string;
     CellH11: string;
     CellBINIT: string;
+    CellPRICE: string;
     CellSEND: boolean | true;
     originalCellO: string;
     originalCellSEND: boolean;

@@ -13,9 +13,9 @@ const routes: Routes = [
   { path: 'auth', component: AuthComponent, },
   { path: 'invoice', component: InvoicePdfComponent, canActivate: [AuthGuard], },
   { path: 'users', component: UsersComponent, canActivate: [AuthGuard], },
-  {path: 'table', component: FileTableComponent, canActivate: [AuthGuard],},
-  // {path: 'reports', component: ReportsComponent, canActivate: [AuthGuard],},
-  {path: 'reports', component: ReportExcelComponent, canActivate: [AuthGuard],},
+  { path: 'table', component: FileTableComponent, canActivate: [AuthGuard],},
+  { path: 'reports', component: ReportsComponent, canActivate: [AuthGuard],},
+  // {path: 'reports', component: ReportExcelComponent, canActivate: [AuthGuard],},
 ];
 
 @NgModule({
