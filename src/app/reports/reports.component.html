@@ -7,9 +7,9 @@
             <mat-panel-title>
                 Реестр загруженных файлов
             </mat-panel-title>
-            <!-- <mat-panel-description>
+            <mat-panel-description>
             {{panelOpenState ? 'Свернуть таблицу' : 'Развернуть таблицу'}}
-            </mat-panel-description> -->
+            </mat-panel-description>
           </mat-expansion-panel-header>
     <table mat-table
           [dataSource]="files" multiTemplateDataRows matSort
@@ -31,12 +31,12 @@
         <td mat-cell *matCellDef="let element" class="mat-column-sourceFileName"> {{ getRegionName(element.region) }} </td>
     </ng-container>
     <ng-container matColumnDef="quantity">
-        <th mat-header-cell *matHeaderCellDef class="mat-column-sourceFileName"> Количество </th>
+        <th mat-header-cell *matHeaderCellDef class="mat-column-sourceFileName"> Общее количество </th>
         <td mat-cell *matCellDef="let element" class="mat-column-sourceFileName"> {{ element.totalRecords }} чел. </td>
     </ng-container>
       <ng-container matColumnDef="checked">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Получено (%) </th>
-        <td mat-cell *matCellDef="let element" [ngStyle]="getStatusColor(element.completed)"> {{ element.completed }}% </td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Получили </th>
+        <td mat-cell *matCellDef="let element" [ngStyle]="getStatusColor(percentOfCompleted(element.totalRecords, element.completed))"> {{ element.completed }} чел. </td>
     </ng-container>
       <!-- <ng-container matColumnDef="downloadLink">
         <th mat-header-cell *matHeaderCellDef></th>
@@ -50,6 +50,7 @@
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let element">
             <button mat-stroked-button color="primary" (click)="openFile(element.ID)">Открыть файл</button>
+            <button mat-stroked-button color="primary" [disabled]="element.completed == 0" (click)="openFile(element.ID)">Excel</button>
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>

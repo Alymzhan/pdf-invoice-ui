@@ -99,8 +99,18 @@ export class ReportsComponent implements OnInit, OnDestroy{
     this.subscription = this.invoiceService.getFile(this.fileId).subscribe(file => {
       if (file) {
         this.file = file;
+        this.panelOpenState = false;
       }
     });
+  }
+
+  percentOfCompleted(total: number, completed: number) {
+    if (total !== 0) {
+      const result = (completed / total) * 100;
+      return parseFloat(result.toFixed(1)); 
+    } else {
+      return 0;
+    }
   }
 
   generateRandomNumber(): number {

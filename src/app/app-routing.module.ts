@@ -6,6 +6,7 @@ import { FileTableComponent } from './file-table/file-table.component';
 import { AuthComponent } from './auth/auth.component';
 import { AuthGuard } from './auth/auth.guard';
 import { ReportsComponent } from './reports/reports.component';
+import { ReportExcelComponent } from './report-excel/report-excel.component';
 
 const routes: Routes = [
   { path: '', component: AuthComponent },
@@ -13,7 +14,8 @@ const routes: Routes = [
   { path: 'invoice', component: InvoicePdfComponent, canActivate: [AuthGuard], },
   { path: 'users', component: UsersComponent, canActivate: [AuthGuard], },
   {path: 'table', component: FileTableComponent, canActivate: [AuthGuard],},
-  {path: 'reports', component: ReportsComponent, canActivate: [AuthGuard],},
+  // {path: 'reports', component: ReportsComponent, canActivate: [AuthGuard],},
+  {path: 'reports', component: ReportExcelComponent, canActivate: [AuthGuard],},
 ];
 
 @NgModule({

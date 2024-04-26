@@ -41,6 +41,7 @@ import { DeleteUserConfirmationDialogComponent } from './delete-user-confirmatio
 import { MatDialogModule } from '@angular/material/dialog';
 import { ReportsComponent } from './reports/reports.component';
 import { ReportDetailComponent } from './report-detail/report-detail.component';
+import { ReportExcelComponent } from './report-excel/report-excel.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { ReportDetailComponent } from './report-detail/report-detail.component';
     AddUserDialogComponent,
     DeleteUserConfirmationDialogComponent,
     ReportsComponent,
-    ReportDetailComponent
+    ReportDetailComponent,
+    ReportExcelComponent
   ],
   imports: [
     BrowserModule,

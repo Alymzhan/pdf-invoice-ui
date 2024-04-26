@@ -39,6 +39,7 @@ export class ReportDetailComponent implements OnInit, OnDestroy, OnChanges{
   user: User | null;
   randomPercent: number;
   panelOpenState = true;
+  error: string = '';
 
   constructor(private invoiceService: InvoicePDFService,
     private authService: AuthService,
@@ -111,8 +112,72 @@ export class ReportDetailComponent implements OnInit, OnDestroy, OnChanges{
     this.fileId = fileId;
   }
 
+  calculateChecked(){
+    let checked = 0;
+    this.file.File.records.forEach(item => {
+      if (item.CellSEND) {
+        checked++;
+      }
+    })
+    this.file.File.completed = checked;
+  }
+
   saveFile(file: any){
-    console.log('file here', file)
+    this.calculateChecked()
+
+    this.userSub = this.invoiceService.updateFile(this.file.File.ID, this.file.File).subscribe(
+      resData => {
+        if (resData.status) {
+          this.updateTable(this.file?.File);
+          console.log(resData);
+          // Показать сообщение об успехе
+          this.snackBar.open('Все записи успешно изменены', 'Закрыть', {
+            duration: 3000,
+            verticalPosition: 'top',
+            horizontalPosition: 'center',
+          });
+        } else {
+          console.log(resData.message);
+          this.error = this.handleErrorMessage(resData.message);
+          // Показать сообщение об ошибке
+          this.snackBar.open(this.error, 'Закрыть', {
+            duration: 3000,
+            verticalPosition: 'top',
+            horizontalPosition: 'center',
+          });
+        }
+      },
+      errorMessage => {
+        console.log(errorMessage);
+        this.error = errorMessage;
+        // Показать сообщение об ошибке
+        this.snackBar.open(this.error, 'Закрыть', {
+          duration: 3000,
+          verticalPosition: 'top',
+          horizontalPosition: 'center',
+        });
+      }
+    );
+  }
+
+
+  private handleErrorMessage(errorRes: string) {
+    let errorMessage = 'Неизвестная ошибка. Обратитесь к Администратору';
+    if (!errorRes) {
+      return errorMessage;
+    }
+    switch (errorRes) {
+      case 'EMAIL_EXISTS':
+        errorMessage = 'Этот email уже существует';
+        break;
+      case 'Invalid login credentials. Please try again':
+        errorMessage = 'Неверный логин или пароль!';
+        break;
+      case 'User Name address not found':
+        errorMessage = 'Неверный логин или пароль!';
+        break;
+    }
+    return errorMessage;
   }
 
  // Method to update the original values of each record
