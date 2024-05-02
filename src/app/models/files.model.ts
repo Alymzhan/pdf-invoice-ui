@@ -17,7 +17,7 @@ export class Files {
     completed: number;
     totalItems: number;
     totalAmount: number;
-    registerNumber: number;
+    registerNumber: string;
     registerDate: string;
     contactDate: string;
     titleInfo: string;

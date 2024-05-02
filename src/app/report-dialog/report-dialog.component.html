@@ -1,0 +1,47 @@
+<mat-card>
+    <mat-card-header>
+      <mat-card-title>Выгрузить отчет</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <form #reportForm="ngForm">
+            <mat-form-field style="width: 100%;" appearance="fill">
+              <input matInput placeholder="Контракт" [(ngModel)]="file.contactDate" name="contactDate" required minlength="3">
+              <mat-error *ngIf="reportForm.controls['contactDate']?.invalid && (reportForm.controls['contactDate']?.dirty || reportForm.controls['contactDate']?.touched)">
+                Контракт не должен быть пустым
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field style="width: 100%;" appearance="fill">
+                <input matInput placeholder="№ реестра" [(ngModel)]="file.registerNumber" name="registerNumber" required minlength="3">
+                <mat-error *ngIf="reportForm.controls['registerNumber']?.invalid && (reportForm.controls['registerNumber']?.dirty || reportForm.controls['registerNumber']?.touched)">
+                    № реестра не должена быть пустой
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field style="width: 100%;" appearance="fill">
+                <input matInput placeholder="Дата реестра" [(ngModel)]="file.registerDate" name="registerDate" required minlength="3">
+                <mat-error *ngIf="reportForm.controls['registerDate']?.invalid && (reportForm.controls['registerDate']?.dirty || reportForm.controls['registerDate']?.touched)">
+                    Дата реестра не должена быть пустой
+                </mat-error>
+              </mat-form-field>  
+            <mat-form-field style="width: 100%;" appearance="fill">
+              <textarea matInput placeholder="Шапка отчета" [(ngModel)]="file.titleInfo" name="titleInfo" required minlength="3" rows="4" cols="50"></textarea>
+              <!-- <input matInput placeholder="Шапка отчета" [(ngModel)]="file.titleInfo" name="titleInfo" required minlength="3"> -->
+              <mat-error *ngIf="reportForm.controls['titleInfo']?.invalid && (reportForm.controls['titleInfo']?.dirty || reportForm.controls['titleInfo']?.touched)">
+                Шапка отчета не должена быть пустой
+              </mat-error>
+            </mat-form-field>
+            <!-- <mat-form-field style="width: 100%;" appearance="fill">
+                <input matInput placeholder="Номер телефона" [(ngModel)]="user.phone_number" name="phone_number" required minlength="5">
+                <mat-error *ngIf="reportForm.controls['phone_number']?.invalid && (reportForm.controls['phone_number']?.dirty || reportForm.controls['phone_number']?.touched)">
+                  Номер телефона должен содержать не менее 5 символов
+                </mat-error>
+              </mat-form-field> -->
+          </form>
+      <mat-divider></mat-divider>
+    </mat-card-content>
+    <mat-divider></mat-divider>
+    <mat-card-actions align="end"> 
+      <button mat-button (click)="onCancel()">Отмена</button>
+      <button mat-button color="primary" [disabled]="reportForm.invalid" (click)="onSave()">Создать отчет</button>
+    </mat-card-actions>
+  </mat-card>
+  

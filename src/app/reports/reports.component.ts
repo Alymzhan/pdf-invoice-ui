@@ -10,6 +10,7 @@ import { Files, GeneratedFile, OneFileResponseData } from '../models/files.model
 import { InvoicePDFService } from '../invoice-pdf/invoice-pdf.service';
 import { User } from '../auth/user.model';
 import { CityService } from '../shared/city.service';
+import { ReportDialogComponent } from '../report-dialog/report-dialog.component';
 
 
 @Component({
@@ -34,15 +35,18 @@ export class ReportsComponent implements OnInit, OnDestroy{
   columnsToDisplay = ['ID', 'CreatedAt', 'fileName', 'region', 'quantity', 'checked', 'editListLink'];
   isAuthenticated = false;
   private userSub: Subscription;
+  private fileSub: Subscription;
   user: User | null;
   randomPercent: number;
   fileId: number = 0;
   file: OneFileResponseData;
   panelOpenState = true;
+  error: string;
 
   constructor(private invoiceService: InvoicePDFService,
     private authService: AuthService,
     private cityService: CityService,
+    private dialog: MatDialog, 
     private snackBar: MatSnackBar
     ) {
       this.userSub = this.authService.user.subscribe(user => {
@@ -57,6 +61,7 @@ export class ReportsComponent implements OnInit, OnDestroy{
 
   ngOnInit() {
     this.subscription = this.invoiceService.getFiles(this.user? this.user?.id : 0).subscribe(files => {
+      console.log('files.Files', files.Files);
       this.updateTable(files.Files)
     });
   }
@@ -82,6 +87,7 @@ export class ReportsComponent implements OnInit, OnDestroy{
   ngOnDestroy() {
     this.subscription.unsubscribe();
     this.userSub.unsubscribe();
+    this.fileSub.unsubscribe();
   }
 
   getStatusColor(amount: number): any {
@@ -117,8 +123,57 @@ export class ReportsComponent implements OnInit, OnDestroy{
     return Math.floor(Math.random() * 1000) + 1; // Generate random number between 1 and 1000
   }
 
-  downloadFile(file: GeneratedFile): void {
-    this.invoiceService.downloadFile(file.fileName).subscribe(
+  openReport(file: Files): void {
+    const dialogRef = this.dialog.open(ReportDialogComponent, {
+      width: '400px',
+      data: { file }
+    });
+
+    dialogRef.afterClosed().subscribe(updatedFile => {
+      // // Обработка результата после закрытия диалогового окна
+      if (updatedFile) {
+        console.log('updatedFile', updatedFile);
+        // // Добавление нового пользователя в список пользователей или выполнение других действий
+        this.fileSub = this.invoiceService.updateFile(updatedFile.ID, updatedFile).subscribe(
+          resData => {
+            if (resData.status) {
+              console.log(resData);
+              this.generateReport(updatedFile)
+              // Показать сообщение об успехе
+              this.snackBar.open('Все записи успешно изменены', 'Закрыть', {
+                duration: 3000,
+                verticalPosition: 'top',
+                horizontalPosition: 'center',
+              });
+            } else {
+              console.log(resData.message);
+              this.error = this.handleErrorMessage(resData.message);
+              // Показать сообщение об ошибке
+              this.snackBar.open(this.error, 'Закрыть', {
+                duration: 3000,
+                verticalPosition: 'top',
+                horizontalPosition: 'center',
+              });
+            }
+          },
+          errorMessage => {
+            console.log(errorMessage);
+            this.error = errorMessage;
+            // Показать сообщение об ошибке
+            this.snackBar.open(this.error, 'Закрыть', {
+              duration: 3000,
+              verticalPosition: 'top',
+              horizontalPosition: 'center',
+            });
+          }
+        );
+       
+      }
+    });
+  }
+
+  generateReport(file: Files): void {
+    this.invoiceService.generateReport(file).subscribe(
       (response: Blob) => {
       const fileBlob = new Blob([response], { type: file.contentType });
       
@@ -138,5 +193,24 @@ export class ReportsComponent implements OnInit, OnDestroy{
       // Remove the anchor element from the body
       document.body.removeChild(link);
     })
+  }
+
+  private handleErrorMessage(errorRes: string) {
+    let errorMessage = 'Неизвестная ошибка. Обратитесь к Администратору';
+    if (!errorRes) {
+      return errorMessage;
+    }
+    switch (errorRes) {
+      case 'EMAIL_EXISTS':
+        errorMessage = 'Этот email уже существует';
+        break;
+      case 'Invalid login credentials. Please try again':
+        errorMessage = 'Неверный логин или пароль!';
+        break;
+      case 'User Name address not found':
+        errorMessage = 'Неверный логин или пароль!';
+        break;
+    }
+    return errorMessage;
   }
 }

@@ -40,6 +40,12 @@ export class InvoicePDFService {
         );
     }
 
+    generateReport(body: Files) {
+        return this.http.post('/api/generateReport', body, { responseType: 'blob' });
+    }
+    
+    
+
     getFile(id: number) {
         return this.http
         .get<OneFileResponseData>(
