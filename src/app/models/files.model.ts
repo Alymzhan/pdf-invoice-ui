@@ -19,7 +19,7 @@ export class Files {
     totalAmount: number;
     registerNumber: string;
     registerDate: string;
-    contactDate: string;
+    contractDate: string;
     titleInfo: string;
   }
 
@@ -60,6 +60,7 @@ export class Files {
     CellBINIT: string;
     CellPRICE: string;
     CellSEND: boolean | true;
+    CellSum: number;
     originalCellO: string;
     originalCellSEND: boolean;
   }

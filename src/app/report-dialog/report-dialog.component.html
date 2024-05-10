@@ -5,8 +5,8 @@
     <mat-card-content>
         <form #reportForm="ngForm">
             <mat-form-field style="width: 100%;" appearance="fill">
-              <input matInput placeholder="Контракт" [(ngModel)]="file.contactDate" name="contactDate" required minlength="3">
-              <mat-error *ngIf="reportForm.controls['contactDate']?.invalid && (reportForm.controls['contactDate']?.dirty || reportForm.controls['contactDate']?.touched)">
+              <input matInput placeholder="Контракт" [(ngModel)]="file.contractDate" name="contractDate" required minlength="3">
+              <mat-error *ngIf="reportForm.controls['contractDate']?.invalid && (reportForm.controls['contractDate']?.dirty || reportForm.controls['contractDate']?.touched)">
                 Контракт не должен быть пустым
               </mat-error>
             </mat-form-field>

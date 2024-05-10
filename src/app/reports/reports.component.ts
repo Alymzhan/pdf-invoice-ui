@@ -173,6 +173,9 @@ export class ReportsComponent implements OnInit, OnDestroy{
   }
 
   generateReport(file: Files): void {
+    const filteredRecords = file.records.filter(record => record.CellSEND);
+    file.records = filteredRecords;
+
     this.invoiceService.generateReport(file).subscribe(
       (response: Blob) => {
       const fileBlob = new Blob([response], { type: file.contentType });

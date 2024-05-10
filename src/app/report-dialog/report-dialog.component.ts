@@ -23,9 +23,9 @@ export class ReportDialogComponent {
     console.log('this.file', this.file);
     const filteredCity = this.allRegions.find(city => city.value === this.file.region);
     // Emit the updated file data and close the dialog
-    if (filteredCity?.titleInfo){
+    if (this.file.titleInfo == "" && filteredCity?.titleInfo){
       this.file.titleInfo=filteredCity?.titleInfo;
-      this.file.contactDate=filteredCity?.contractData;
+      this.file.contractDate=filteredCity?.contractData;
     }
   }
 
