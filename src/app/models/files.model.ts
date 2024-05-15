@@ -15,8 +15,8 @@ export class Files {
     records: Records[];
     totalRecords: number;
     completed: number;
-    totalItems: number;
-    totalAmount: number;
+    totalItems: string;
+    totalAmount: string;
     registerNumber: string;
     registerDate: string;
     contractDate: string;

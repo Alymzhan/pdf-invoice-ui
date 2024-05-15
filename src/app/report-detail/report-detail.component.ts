@@ -115,15 +115,17 @@ export class ReportDetailComponent implements OnInit, OnDestroy, OnChanges{
   calculateChecked(){
     let checked = 0;
     let totalAmount = 0;
+    let totalItems = 0;
     this.file.File.records.forEach(item => {
       if (item.CellSEND) {
         checked++;
+        totalItems=+item.CellM;
         totalAmount=+item.CellSum;
       }
     })
     this.file.File.completed = checked;
-    this.file.File.totalAmount = totalAmount;
-    this.file.File.totalItems = checked;
+    this.file.File.totalAmount = totalAmount.toString();
+    this.file.File.totalItems = totalItems.toString();
   }
 
   saveFile(file: any){

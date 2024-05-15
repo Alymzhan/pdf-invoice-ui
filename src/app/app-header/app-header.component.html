@@ -13,10 +13,10 @@
         </button>
         <button mat-menu-item *ngIf="isAdmin" [matMenuTriggerFor]="admin"><mat-icon>settings</mat-icon> Настройки</button>
         <mat-menu #admin="matMenu">
-            <button mat-menu-item disabled (click)="settings()">
+            <!-- <button mat-menu-item disabled (click)="settings()">
                 <mat-icon>build</mat-icon>
                 Настройки счетов-фактур
-            </button>
+            </button> -->
             <button mat-menu-item (click)="users()">
                 <mat-icon>group</mat-icon>
                 Пользователи

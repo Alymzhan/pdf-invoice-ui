@@ -85,9 +85,13 @@ export class ReportsComponent implements OnInit, OnDestroy{
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
-    this.userSub.unsubscribe();
-    this.fileSub.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+    if (this.userSub) {
+      this.userSub.unsubscribe();
+    }
+    
   }
 
   getStatusColor(amount: number): any {
@@ -129,12 +133,12 @@ export class ReportsComponent implements OnInit, OnDestroy{
       data: { file }
     });
 
-    dialogRef.afterClosed().subscribe(updatedFile => {
+    this.subscription = dialogRef.afterClosed().subscribe(updatedFile => {
       // // Обработка результата после закрытия диалогового окна
       if (updatedFile) {
         console.log('updatedFile', updatedFile);
         // // Добавление нового пользователя в список пользователей или выполнение других действий
-        this.fileSub = this.invoiceService.updateFile(updatedFile.ID, updatedFile).subscribe(
+        this.invoiceService.updateFile(updatedFile.ID, updatedFile).subscribe(
           resData => {
             if (resData.status) {
               console.log(resData);
@@ -176,7 +180,7 @@ export class ReportsComponent implements OnInit, OnDestroy{
     const filteredRecords = file.records.filter(record => record.CellSEND);
     file.records = filteredRecords;
 
-    this.invoiceService.generateReport(file).subscribe(
+    this.subscription = this.invoiceService.generateReport(file).subscribe(
       (response: Blob) => {
       const fileBlob = new Blob([response], { type: file.contentType });
       
