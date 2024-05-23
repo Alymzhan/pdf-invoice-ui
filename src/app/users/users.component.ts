@@ -51,7 +51,7 @@ export class UsersComponent implements OnInit, OnDestroy{
         this.userSub = this.usersService.editUser(updatedUser).subscribe(
           resData => {
             if (resData.status) {
-              console.log(resData);
+              // console.log(resData);
               // Показать сообщение об успехе
               this.snackBar.open('Пользователь успешно изменен', 'Закрыть', {
                 duration: 3000,
@@ -61,7 +61,7 @@ export class UsersComponent implements OnInit, OnDestroy{
               // Обновление данных пользователей после добавления нового пользователя
               this.refreshUsersData();
             } else {
-              console.log(resData.message);
+              // console.log(resData.message);
               this.error = this.handleErrorMessage(resData.message);
               // Показать сообщение об ошибке
               this.snackBar.open(this.error, 'Закрыть', {
@@ -72,7 +72,7 @@ export class UsersComponent implements OnInit, OnDestroy{
             }
           },
           errorMessage => {
-            console.log(errorMessage);
+            // console.log(errorMessage);
             this.error = errorMessage;
             // Показать сообщение об ошибке
             this.snackBar.open(this.error, 'Закрыть', {
@@ -96,11 +96,11 @@ export class UsersComponent implements OnInit, OnDestroy{
       // Обработка результата после закрытия диалогового окна
       if (result) {
         // Добавление нового пользователя в список пользователей или выполнение других действий
-        console.log('Новый пользователь добавлен:', result);
+        // console.log('Новый пользователь добавлен:', result);
         this.userSub = this.usersService.addNewUser(result.name, result.userName, result.password, result.phone_number, result.config).subscribe(
           resData => {
             if (resData.status) {
-              console.log(resData);
+              // console.log(resData);
               // Показать сообщение об успехе
               this.snackBar.open('Новый пользователь успешно добавлен', 'Закрыть', {
                 duration: 3000,
@@ -110,7 +110,7 @@ export class UsersComponent implements OnInit, OnDestroy{
               // Обновление данных пользователей после добавления нового пользователя
               this.refreshUsersData();
             } else {
-              console.log(resData.message);
+              // console.log(resData.message);
               this.error = this.handleErrorMessage(resData.message);
               // Показать сообщение об ошибке
               this.snackBar.open(this.error, 'Закрыть', {
@@ -121,7 +121,7 @@ export class UsersComponent implements OnInit, OnDestroy{
             }
           },
           errorMessage => {
-            console.log(errorMessage);
+            // console.log(errorMessage);
             this.error = errorMessage;
             // Показать сообщение об ошибке
             this.snackBar.open(this.error, 'Закрыть', {
@@ -169,12 +169,12 @@ export class UsersComponent implements OnInit, OnDestroy{
   
     dialogRef.afterClosed().subscribe((confirmed) => {
       if (confirmed) {
-        console.log('Удаление пользователя:', user);
+        // console.log('Удаление пользователя:', user);
         
         this.usersService.deleteUser(user.ID).subscribe(
           resData => {
             if (resData.status) {
-              console.log('Пользователь успешно удален:', user);
+              // console.log('Пользователь успешно удален:', user);
               // Показать сообщение об успехе
               this.snackBar.open('Пользователь успешно удален', 'Закрыть', {
                 duration: 3000,
@@ -184,7 +184,7 @@ export class UsersComponent implements OnInit, OnDestroy{
               // Обновить данные пользователей в таблице
               this.refreshUsersData();
             } else {
-              console.log('Не удалось удалить пользователя:', user);
+              // console.log('Не удалось удалить пользователя:', user);
               // Показать сообщение об ошибке
               this.snackBar.open('Не удалось удалить пользователя', 'Закрыть', {
                 duration: 3000,
@@ -194,7 +194,7 @@ export class UsersComponent implements OnInit, OnDestroy{
             }
           },
           error => {
-            console.log('Ошибка удаления пользователя:', error);
+            // console.log('Ошибка удаления пользователя:', error);
             // Показать сообщение об ошибке
             this.snackBar.open('Ошибка удаления пользователя', 'Закрыть', {
               duration: 3000,

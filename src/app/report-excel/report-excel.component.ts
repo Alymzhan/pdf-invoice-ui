@@ -19,11 +19,11 @@ export class ReportExcelComponent {
       this.selectedFilePath = file.path; // Store the selected file path
     }
 
-    console.log('fileList', fileList);
+    // console.log('fileList', fileList);
 
     let file = event.target.files[0];  
-
-    console.log('file', file);   
+  
+    // console.log('file', file);   
     let fileReader = new FileReader();    
 
     fileReader.onload = (e) => {    
@@ -45,11 +45,11 @@ export class ReportExcelComponent {
             // Save the updated workbook to a new file
             XLSX.writeFile(workbook, '/Users/alymzhan/Desktop/1111.xlsx');
             var first_sheet_name = workbook.SheetNames[0];    
-            // var worksheet = workbook.Sheets[first_sheet_name];    
-            console.log(XLSX.utils.sheet_to_json(worksheet,{raw:true}));    
+            // var worksheet = workbook.Sheets[first_sheet_name];       
+            // console.log(XLSX.utils.sheet_to_json(worksheet,{raw:true}));    
             var arraylist = XLSX.utils.sheet_to_json(worksheet,{raw:true});     
-            let filelist: any = [];    
-            console.log(filelist);
+            let filelist: any = [];   
+            // console.log(filelist);
         } else {
             console.error("File is not an ArrayBuffer.");
         }

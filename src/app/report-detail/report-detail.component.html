@@ -14,7 +14,12 @@
         <mat-form-field>
             <mat-label>Поиск</mat-label>
             <input matInput (keyup)="applyFilter($event)" #input>
-          </mat-form-field>
+        </mat-form-field>
+        <div class="button-container">
+            <!-- Save All button -->
+            <button mat-stroked-button color="primary" [disabled]="!isRowEdited()" (click)="saveFile()">Сохранить изменения</button>
+        </div>
+        
           <div style="overflow-x: auto;">
             <table mat-table
                 [dataSource]="records" multiTemplateDataRows matSort
@@ -69,17 +74,11 @@
                 <th mat-header-cell *matHeaderCellDef class="mat-column-sourceFileName"> Сумма (руб.)</th>
                 <td mat-cell *matCellDef="let element" class="mat-column-sourceFileName"> {{ element.CellSum}} </td>
             </ng-container>
-            <ng-container matColumnDef="editLink">
-                <th mat-header-cell *matHeaderCellDef></th>
-                <td mat-cell *matCellDef="let element">
-                    <button mat-stroked-button color="primary"  [disabled]="!isRowEdited(element)" (click)="saveFile(element)">Сохранить</button>
-                </td>
-            </ng-container>
             <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
             <tr mat-row *matRowDef="let element; columns: columnsToDisplay;">
             </tr>
             </table>
-            <mat-paginator [pageSizeOptions]="[3, 5, 10]"
+            <mat-paginator [pageSizeOptions]="[100, 200, 500]"
                     showFirstLastButtons
                     aria-label="Select page of periodic elements">
             </mat-paginator>

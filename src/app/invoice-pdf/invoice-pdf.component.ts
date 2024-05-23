@@ -77,8 +77,8 @@ export class InvoicePdfComponent implements OnInit, OnDestroy{
   } 
 
   statusTranslations: StatusTranslations = {
-    'Complete': 'Завершено',
-    'Pending': 'Ожидание',
+    'Complete': 'Готово',
+    'Pending': 'Загрузка',
     'Failed': 'Ошибка'
   };
 
@@ -162,6 +162,10 @@ export class InvoicePdfComponent implements OnInit, OnDestroy{
       // Remove the anchor element from the body
       document.body.removeChild(link);
     })
+  }
+
+  refreshPage(): void {
+    location.reload();
   }
 
   getRegionName(value: string): string {

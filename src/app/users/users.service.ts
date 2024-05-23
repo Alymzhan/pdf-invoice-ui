@@ -20,7 +20,7 @@ export class UsersService {
         catchError(this.handleError),
         tap(resData => {
           if (resData.status) {
-            console.log('response', resData);
+            // console.log('response', resData);
           } 
         })
       );
@@ -42,9 +42,9 @@ export class UsersService {
       .pipe(
         catchError(this.handleError),
         tap(resData => {
-            console.log('response new user1', resData);
+            // console.log('response new user1', resData);
           if (resData.status) {
-            console.log('response new user2', resData);
+            // console.log('response new user2', resData);
           } 
         })
       );
@@ -60,9 +60,9 @@ export class UsersService {
       .pipe(
         catchError(this.handleError),
         tap(resData => {
-            console.log('response new user1', resData);
+            // console.log('response new user1', resData);
           if (resData.status) {
-            console.log('response new user2', resData);
+            // console.log('response new user2', resData);
           } 
         })
       );
@@ -78,7 +78,7 @@ export class UsersService {
         catchError(this.handleError),
         tap(resData => {
           if (resData.status) {
-            console.log('response Delete user', resData);
+            // console.log('response Delete user', resData);
           } 
         })
       );

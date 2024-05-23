@@ -136,12 +136,12 @@ export class ReportsComponent implements OnInit, OnDestroy{
     this.subscription = dialogRef.afterClosed().subscribe(updatedFile => {
       // // Обработка результата после закрытия диалогового окна
       if (updatedFile) {
-        console.log('updatedFile', updatedFile);
+        // console.log('updatedFile', updatedFile);
         // // Добавление нового пользователя в список пользователей или выполнение других действий
         this.invoiceService.updateFile(updatedFile.ID, updatedFile).subscribe(
           resData => {
             if (resData.status) {
-              console.log(resData);
+              // console.log(resData);
               this.generateReport(updatedFile)
               // Показать сообщение об успехе
               this.snackBar.open('Все записи успешно изменены', 'Закрыть', {
@@ -150,7 +150,7 @@ export class ReportsComponent implements OnInit, OnDestroy{
                 horizontalPosition: 'center',
               });
             } else {
-              console.log(resData.message);
+              // console.log(resData.message);
               this.error = this.handleErrorMessage(resData.message);
               // Показать сообщение об ошибке
               this.snackBar.open(this.error, 'Закрыть', {
@@ -161,7 +161,7 @@ export class ReportsComponent implements OnInit, OnDestroy{
             }
           },
           errorMessage => {
-            console.log(errorMessage);
+            // console.log(errorMessage);
             this.error = errorMessage;
             // Показать сообщение об ошибке
             this.snackBar.open(this.error, 'Закрыть', {

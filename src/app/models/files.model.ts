@@ -14,7 +14,7 @@ export class Files {
     region: string;
     records: Records[];
     totalRecords: number;
-    completed: number;
+    completed: string;
     totalItems: string;
     totalAmount: string;
     registerNumber: string;

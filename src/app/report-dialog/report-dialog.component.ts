@@ -20,7 +20,7 @@ export class ReportDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.file = { ...data.file }; // Make a copy of the user data to avoid modifying the original data
-    console.log('this.file', this.file);
+    // console.log('this.file', this.file);
     const filteredCity = this.allRegions.find(city => city.value === this.file.region);
     // Emit the updated file data and close the dialog
     if (this.file.titleInfo == "" && filteredCity?.titleInfo){

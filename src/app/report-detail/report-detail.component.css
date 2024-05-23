@@ -11,3 +11,9 @@
     font-size: 14px;
     width: 100%;
   }
+
+  .button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px; /* Adjust as needed */
+}

@@ -33,7 +33,7 @@ export class ReportDetailComponent implements OnInit, OnDestroy, OnChanges{
   showProgressBar = false;
   showFinishText = false;
   finishText='Done!';
-  columnsToDisplay = ['sendStatus', 'fullName', 'ssn', 'referenceNumber', 'referenceDate', 'invoiceDate', 'invoiceNumber', 'itemDescription', 'itemQuantity', 'itemPrice', 'totalSum', 'editLink'];
+  columnsToDisplay = ['sendStatus', 'fullName', 'ssn', 'referenceNumber', 'referenceDate', 'invoiceDate', 'invoiceNumber', 'itemDescription', 'itemQuantity', 'itemPrice', 'totalSum'];
   isAuthenticated = false;
   private userSub: Subscription;
   user: User | null;
@@ -94,8 +94,12 @@ export class ReportDetailComponent implements OnInit, OnDestroy, OnChanges{
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
-    this.userSub.unsubscribe();
+    if (this.subscription){
+      this.subscription.unsubscribe();
+    }
+    if (this.userSub) {
+      this.userSub.unsubscribe();
+    }
   }
 
   getStatusColor(amount: number): any {
@@ -118,32 +122,38 @@ export class ReportDetailComponent implements OnInit, OnDestroy, OnChanges{
     let totalItems = 0;
     this.file.File.records.forEach(item => {
       if (item.CellSEND) {
-        checked++;
-        totalItems=+item.CellM;
-        totalAmount=+item.CellSum;
+          checked++;
+          totalItems += Number(item.CellM);
+          totalAmount += Number(item.CellSum);
       }
-    })
-    this.file.File.completed = checked;
-    this.file.File.totalAmount = totalAmount.toString();
+    });
+    this.file.File.completed = checked.toString();
+    this.file.File.totalAmount = this.roundToTwoDecimals(totalAmount.toString());
     this.file.File.totalItems = totalItems.toString();
   }
 
-  saveFile(file: any){
+
+  roundToTwoDecimals(value: string) {
+      return parseFloat(value).toFixed(2);
+  }
+
+  saveFile(){
     this.calculateChecked()
 
     this.userSub = this.invoiceService.updateFile(this.file.File.ID, this.file.File).subscribe(
       resData => {
         if (resData.status) {
           this.updateTable(this.file?.File);
-          console.log(resData);
+          // console.log(resData);
           // Показать сообщение об успехе
           this.snackBar.open('Все записи успешно изменены', 'Закрыть', {
             duration: 3000,
             verticalPosition: 'top',
             horizontalPosition: 'center',
           });
+          window.location.reload();
         } else {
-          console.log(resData.message);
+          // console.log(resData.message);
           this.error = this.handleErrorMessage(resData.message);
           // Показать сообщение об ошибке
           this.snackBar.open(this.error, 'Закрыть', {
@@ -154,7 +164,7 @@ export class ReportDetailComponent implements OnInit, OnDestroy, OnChanges{
         }
       },
       errorMessage => {
-        console.log(errorMessage);
+        // console.log(errorMessage);
         this.error = errorMessage;
         // Показать сообщение об ошибке
         this.snackBar.open(this.error, 'Закрыть', {
@@ -197,10 +207,16 @@ export class ReportDetailComponent implements OnInit, OnDestroy, OnChanges{
     return Math.floor(Math.random() * 1000) + 1; // Generate random number between 1 and 1000
   }
 
-  // Method to check if the row record has been edited
-  isRowEdited(element: any): boolean {
-    return element.CellO !== element.originalCellO || element.CellSEND !== element.originalCellSEND;
-  }
+  isRowEdited(): boolean {
+    if (this.file) {
+      for (let element of this.file?.File.records) {
+        if (element.CellO !== element.originalCellO || element.CellSEND !== element.originalCellSEND) {
+            return true;
+        }
+      }
+    }
+    return false;
+}
 
   downloadFile(file: GeneratedFile): void {
     this.invoiceService.downloadFile(file.fileName).subscribe(
